@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import entity.Galaxy;
 import entity.Position;
 
-public class PosistionRepository {	
+public class PositionRepository {	
 	private DataSource dataSource;
 
-	public PosistionRepository() {
+	public PositionRepository() {
 		dataSource = new DataSource();
 	}
 	/**

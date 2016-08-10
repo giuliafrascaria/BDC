@@ -10,9 +10,14 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import boundary.WaitingGUI;
+import entity.AlternativeName;
 import entity.Brightness;
 import entity.Galaxy;
 import entity.Position;
+import persistence.AltNameRepository;
+import persistence.BrightnessRepository;
+import persistence.GalaxyRepository;
+import persistence.PositionRepository;
 
 public class UploadController {
 
@@ -75,6 +80,8 @@ public class UploadController {
 				JOptionPane.showMessageDialog(null, "Il file immesso non esiste", "Errore", JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente, riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente, riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
 			}
 			
 			long currentTime = Calendar.getInstance().getTimeInMillis() - time;
@@ -86,7 +93,7 @@ public class UploadController {
 			
 		}
 		
-		private void readGalaxies() throws IOException {
+		private void readGalaxies() throws Exception {
 			BufferedReader crunchifyBuffer = null;
 			
 			String crunchifyLine;
@@ -101,9 +108,7 @@ public class UploadController {
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
 					
 				String[] strArray = crunchifyLine.split(";");
-				
-				//crea le entità galassia posizione e luminosità che ti servono
-						
+										
 				name = strArray[0].trim();
 				rah = strArray[1].trim();
 				ram = strArray[2].trim();
@@ -124,6 +129,22 @@ public class UploadController {
 				z = strArray[22].trim();
 				e_z = strArray[23].trim();
 				aName = strArray[25].trim();
+						
+				/*System.out.println(name + " " + rah + " " + ram + " " + ras + " " + de + " " + ded + " " + dem + " " + des + " " + red + " " + d + " " + sp + " " + l_lnev1 + " " + lnev + " " + l_lnev2 + " " + lne2 + " " + l_loiv + " " + lnoiv + " " +	z + " " + e_z + " " + aName);
+				System.out.println();
+					
+				//aspetto per prova della finestra di attesa
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				//*/
+
+					
+				if( name == null || name == ""){ //end of the file, so break
+					break;
+				}
 				
 				Galaxy galaxy = new Galaxy();
 				if (name.equals("")) {
@@ -139,56 +160,84 @@ public class UploadController {
 				if (!z.equals("")) {
 					galaxy.setMetalVal(Float.parseFloat(z));
 				}
-				if (!sp.equals("")) {
+				if (sp.equals("")) {
 					//errore deve esserci sempre classe spettrale
 				}
 				galaxy.setSpectralClass(sp);
 				
 				Position pos = new Position();
+				if (rah.equals("") || ram.equals("") || ras.equals("") || de.equals("") || ded.equals("") || dem.equals("") || des.equals("") || red.equals("")) {
+					//errore deve esserci sempre la posizione
+				}
 				pos.setRaH(Float.parseFloat(rah));
 				pos.setRaM(Float.parseFloat(ram));
 				pos.setRaS(Float.parseFloat(ras));
-				//pos.setDeSgn(de);
+				if (de.equals("+")) {
+					pos.setDeSgn(true);
+				} else {
+					pos.setDeSgn(false);
+				}
 				pos.setDeD(Float.parseFloat(ded));
 				pos.setDeM(Float.parseFloat(dem));
 				pos.setDeS(Float.parseFloat(des));
+				pos.setRedShift(Float.parseFloat(red));
 				
-				Brightness br1 = new Brightness();
-				br1.setIon("NeV14.3");
-				//br1.setFlag(l_lnev1);
-				br1.setVal(Float.parseFloat(lnev));
-				br1.setGalaxy(name);
+				GalaxyRepository gr = new GalaxyRepository();
+				gr.persist(galaxy);
 				
-				Brightness br2 = new Brightness();
-				br2.setIon("NeV24.3");
-				//br2.setFlag(l_lnev1);
-				br2.setVal(Float.parseFloat(lnev));
-				br2.setGalaxy(name);
+				PositionRepository pr = new PositionRepository();
+				pr.persist(pos);
 				
-				Brightness br3 = new Brightness();
-				br3.setIon("OIV25.9");
-				//br3.setFlag(l_lnev1);
-				br3.setVal(Float.parseFloat(lnev));
-				br3.setGalaxy(name);
-				
-						
-				System.out.println(name + " " + rah + " " + ram + " " + ras + " " + de + " " + ded + " " + dem + " " + des + " " + red + " " + d + " " + sp + " " + l_lnev1 + " " + lnev + " " + l_lnev2 + " " + lne2 + " " + l_loiv + " " + lnoiv + " " +	z + " " + e_z + " " + aName);
-				System.out.println();
-					
-				//aspetto per prova della finestra di attesa
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				BrightnessRepository br = new BrightnessRepository();
+				if (!lnev.equals("")) {
+					Brightness br1 = new Brightness();
+					br1.setIon("NeV14.3");
+					if (l_lnev1.equals("")) {
+						br1.setFlag(false);
+					} else {
+						br1.setFlag(true);
+					}
+					br1.setVal(Float.parseFloat(lnev));
+					br1.setGalaxy(name);
+					br.persist(br1);
 				}
-				//
-
-					
-				if( name == null || name == ""){ //end of the file, so break
-					break;
-				}		
-						
-				//aggiungi i valori alle varie entità e salvale nel db				
+				
+				if (!lne2.equals("")) {
+					Brightness br2 = new Brightness();
+					br2.setIon("NeV24.3");
+					if (l_lnev2.equals("")) {
+						br2.setFlag(false);
+					} else {
+						br2.setFlag(true);
+					}
+					br2.setVal(Float.parseFloat(lne2));
+					br2.setGalaxy(name);
+					br.persist(br2);
+				}
+				
+				if (!lnoiv.equals("")) {
+					Brightness br3 = new Brightness();
+					br3.setIon("OIV25.9");
+					if (l_loiv.equals("")) {
+						br3.setFlag(false);
+					} else {
+						br3.setFlag(true);
+					}
+					br3.setVal(Float.parseFloat(lnoiv));
+					br3.setGalaxy(name);
+					br.persist(br3);
+				}
+				
+				String[] strAltNames = aName.split(",");
+				AltNameRepository ar = new AltNameRepository();
+				for (String n : strAltNames) {
+					n = n.trim();
+					AlternativeName alt = new AlternativeName();
+					alt.setName(n);
+					alt.setGalaxy(name);
+					ar.persist(alt);
+				}
+				
 			}
 			crunchifyBuffer.close();
 		}
