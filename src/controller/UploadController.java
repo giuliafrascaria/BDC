@@ -149,6 +149,7 @@ public class UploadController {
 				Galaxy galaxy = new Galaxy();
 				if (name.equals("")) {
 					//errore la galsssia deve avere un nome
+					JOptionPane.showMessageDialog(null, "Alcune galassie mancano del nome e non possono essere salvate", "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				galaxy.setName(name);
 				if (!d.equals("")) {
@@ -162,12 +163,14 @@ public class UploadController {
 				}
 				if (sp.equals("")) {
 					//errore deve esserci sempre classe spettrale
+					JOptionPane.showMessageDialog(null, "La galassia " + name + " non è stata salvata perchè manca di classe spettrale", "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				galaxy.setSpectralClass(sp);
 				
 				Position pos = new Position();
 				if (rah.equals("") || ram.equals("") || ras.equals("") || de.equals("") || ded.equals("") || dem.equals("") || des.equals("") || red.equals("")) {
 					//errore deve esserci sempre la posizione
+					JOptionPane.showMessageDialog(null, "La galassia " + name + " non è stata salvata perchè manca di posizione", "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				pos.setRaH(Float.parseFloat(rah));
 				pos.setRaM(Float.parseFloat(ram));
