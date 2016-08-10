@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import boundary.WaitingGUI;
+import entity.Brightness;
+import entity.Galaxy;
+import entity.Position;
 
 public class UploadController {
 
@@ -101,7 +104,7 @@ public class UploadController {
 				
 				//crea le entità galassia posizione e luminosità che ti servono
 						
-				name = strArray[0].trim(); 
+				name = strArray[0].trim();
 				rah = strArray[1].trim();
 				ram = strArray[2].trim();
 				ras = strArray[3].trim();
@@ -121,6 +124,53 @@ public class UploadController {
 				z = strArray[22].trim();
 				e_z = strArray[23].trim();
 				aName = strArray[25].trim();
+				
+				Galaxy galaxy = new Galaxy();
+				if (name.equals("")) {
+					//errore la galsssia deve avere un nome
+				}
+				galaxy.setName(name);
+				if (!d.equals("")) {
+					galaxy.setDistance(Float.parseFloat(d));
+				}
+				if (!e_z.equals("")) {
+					galaxy.setMetalErr(Float.parseFloat(e_z));
+				}
+				if (!z.equals("")) {
+					galaxy.setMetalVal(Float.parseFloat(z));
+				}
+				if (!sp.equals("")) {
+					//errore deve esserci sempre classe spettrale
+				}
+				galaxy.setSpectralClass(sp);
+				
+				Position pos = new Position();
+				pos.setRaH(Float.parseFloat(rah));
+				pos.setRaM(Float.parseFloat(ram));
+				pos.setRaS(Float.parseFloat(ras));
+				//pos.setDeSgn(de);
+				pos.setDeD(Float.parseFloat(ded));
+				pos.setDeM(Float.parseFloat(dem));
+				pos.setDeS(Float.parseFloat(des));
+				
+				Brightness br1 = new Brightness();
+				br1.setIon("NeV14.3");
+				//br1.setFlag(l_lnev1);
+				br1.setVal(Float.parseFloat(lnev));
+				br1.setGalaxy(name);
+				
+				Brightness br2 = new Brightness();
+				br2.setIon("NeV24.3");
+				//br2.setFlag(l_lnev1);
+				br2.setVal(Float.parseFloat(lnev));
+				br2.setGalaxy(name);
+				
+				Brightness br3 = new Brightness();
+				br3.setIon("OIV25.9");
+				//br3.setFlag(l_lnev1);
+				br3.setVal(Float.parseFloat(lnev));
+				br3.setGalaxy(name);
+				
 						
 				System.out.println(name + " " + rah + " " + ram + " " + ras + " " + de + " " + ded + " " + dem + " " + des + " " + red + " " + d + " " + sp + " " + l_lnev1 + " " + lnev + " " + l_lnev2 + " " + lne2 + " " + l_loiv + " " + lnoiv + " " +	z + " " + e_z + " " + aName);
 				System.out.println();
