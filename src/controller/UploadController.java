@@ -109,6 +109,8 @@ public class UploadController {
 						l_lnev2 = "", l_loiv = "", lnev = "", lne2 = "", lnoiv = "",
 						z = "", e_z = "", aName = "";
 			
+			boolean allSaved = true;
+			
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
 				String[] strArray = crunchifyLine.split(";");
 										
@@ -132,17 +134,6 @@ public class UploadController {
 				z = strArray[22].trim();
 				e_z = strArray[23].trim();
 				aName = strArray[25].trim();
-						
-				/*System.out.println(name + " " + rah + " " + ram + " " + ras + " " + de + " " + ded + " " + dem + " " + des + " " + red + " " + d + " " + sp + " " + l_lnev1 + " " + lnev + " " + l_lnev2 + " " + lne2 + " " + l_loiv + " " + lnoiv + " " +	z + " " + e_z + " " + aName);
-				System.out.println();
-					
-				//aspetto per prova della finestra di attesa
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//*/
 
 					
 				if( name == null || name == ""){ //end of the file, so break
@@ -151,32 +142,22 @@ public class UploadController {
 				
 				Galaxy galaxy = new Galaxy();
 				if (name.equals("")) {
-					System.out.println("non dovrei");
-					//errore la galsssia deve avere un nome
-					JOptionPane.showMessageDialog(null, "Alcune galassie mancano del nome e non possono essere salvate", "Errore", JOptionPane.ERROR_MESSAGE);
+					allSaved = false;
 					continue;
 				}
 				galaxy.setName(name);
-				if (!d.equals("")) {
-					galaxy.setDistance(Float.parseFloat(d));
-				}
-				if (!e_z.equals("")) {
-					galaxy.setMetalErr(Float.parseFloat(e_z));
-				}
-				if (!z.equals("")) {
-					galaxy.setMetalVal(Float.parseFloat(z));
-				}
+				galaxy.setDistance(d);
+				galaxy.setMetalErr(e_z);
+				galaxy.setMetalVal(z);
 				if (sp.equals("")) {
-					//errore deve esserci sempre classe spettrale
-					JOptionPane.showMessageDialog(null, "La galassia " + name + " non è stata salvata perchè manca di classe spettrale", "Errore", JOptionPane.ERROR_MESSAGE);
+					allSaved = false;
 					continue;
 				}
 				galaxy.setSpectralClass(sp);
 				
 				Position pos = new Position();
 				if (rah.equals("") || ram.equals("") || ras.equals("") || de.equals("") || ded.equals("") || dem.equals("") || des.equals("") || red.equals("")) {
-					//errore deve esserci sempre la posizione
-					JOptionPane.showMessageDialog(null, "La galassia " + name + " non è stata salvata perchè manca di posizione", "Errore", JOptionPane.ERROR_MESSAGE);
+					allSaved = false;
 					continue;
 				}
 				pos.setGalaxy(name);
@@ -239,18 +220,22 @@ public class UploadController {
 					br.persist(br3);
 				}
 				
-				String[] strAltNames = aName.split(",");
-				AltNameRepository ar = new AltNameRepository();
-				for (String n : strAltNames) {
-					n = n.trim();
-					AlternativeName alt = new AlternativeName();
-					alt.setName(n);
-					alt.setGalaxy(name);
-					ar.persist(alt);
+				if (!aName.equals("")) {
+					String[] strAltNames = aName.split(",");
+					AltNameRepository ar = new AltNameRepository();
+					for (String n : strAltNames) {
+						n = n.trim();
+						AlternativeName alt = new AlternativeName();
+						alt.setName(n);
+						alt.setGalaxy(name);
+						ar.persist(alt);
+					}
 				}
-				
 			}
 			crunchifyBuffer.close();
+			if (!allSaved) {
+				JOptionPane.showMessageDialog(null, "Alcune galassie non sono state salvate, mancano di campi fondamentali (nome, valori della posizione, classe spettrale)", "Attenzione", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 		private void readSpitzer() throws Exception {
