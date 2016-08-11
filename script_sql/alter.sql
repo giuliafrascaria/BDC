@@ -1,1 +1,1 @@
-drop table brightness
+drop table alternative_name

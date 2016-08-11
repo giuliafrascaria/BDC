@@ -4,5 +4,5 @@ CREATE TABLE alternative_name
 	galaxy character varying(64) 
 		REFERENCES galaxy(name),
 		
-	CONSTRAINT pk_alternative_name PRIMARY KEY (galaxy)
+	CONSTRAINT pk_alternative_name PRIMARY KEY (name)
 )
