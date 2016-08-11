@@ -101,6 +101,35 @@ public class GalaxyRepository {
 		return galaxy;
 	}
 	
+	public void adIRS(String name, String mode) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		final String query = "update galaxies set IRSmode=? where name=?";
+		
+		try{		
+			connection = this.dataSource.getConnection();
+			
+			statement = connection.prepareStatement(query);
+			statement.setString(1, mode);
+			statement.setString(2, name);
+			result = statement.executeQuery();
+			
+		}finally{
+			// release resources
+			if(result != null){
+				result.close();
+			}
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+	}
+	
 	
 	//probabilmente inutile perche fai con findByPrimaryKey == null
 	/*/**

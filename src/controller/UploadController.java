@@ -14,10 +14,12 @@ import entity.AlternativeName;
 import entity.Brightness;
 import entity.Galaxy;
 import entity.Position;
+import entity.SpitzerRow;
 import persistence.AltNameRepository;
 import persistence.BrightnessRepository;
 import persistence.GalaxyRepository;
 import persistence.PositionRepository;
+import persistence.SpitzerRowRepository;
 
 public class UploadController {
 
@@ -150,6 +152,7 @@ public class UploadController {
 				if (name.equals("")) {
 					//errore la galsssia deve avere un nome
 					JOptionPane.showMessageDialog(null, "Alcune galassie mancano del nome e non possono essere salvate", "Errore", JOptionPane.ERROR_MESSAGE);
+					continue;
 				}
 				galaxy.setName(name);
 				if (!d.equals("")) {
@@ -164,6 +167,7 @@ public class UploadController {
 				if (sp.equals("")) {
 					//errore deve esserci sempre classe spettrale
 					JOptionPane.showMessageDialog(null, "La galassia " + name + " non è stata salvata perchè manca di classe spettrale", "Errore", JOptionPane.ERROR_MESSAGE);
+					continue;
 				}
 				galaxy.setSpectralClass(sp);
 				
@@ -171,6 +175,7 @@ public class UploadController {
 				if (rah.equals("") || ram.equals("") || ras.equals("") || de.equals("") || ded.equals("") || dem.equals("") || des.equals("") || red.equals("")) {
 					//errore deve esserci sempre la posizione
 					JOptionPane.showMessageDialog(null, "La galassia " + name + " non è stata salvata perchè manca di posizione", "Errore", JOptionPane.ERROR_MESSAGE);
+					continue;
 				}
 				pos.setRaH(Float.parseFloat(rah));
 				pos.setRaM(Float.parseFloat(ram));
@@ -245,7 +250,7 @@ public class UploadController {
 			crunchifyBuffer.close();
 		}
 		
-		private void readSpitzer() throws IOException{
+		private void readSpitzer() throws Exception {
 			BufferedReader crunchifyBuffer = null;
 			
 			String crunchifyLine;
@@ -261,9 +266,7 @@ public class UploadController {
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
 					
 				String[] strArray = crunchifyLine.split(";");
-				
-				//crea le entità galassia posizione e luminosità che ti servono
-						
+										
 				name = strArray[0].trim();
 				l_Fsiv10 = strArray[1].trim(); 
 				Fsiv10 = strArray[2].trim();
@@ -293,8 +296,13 @@ public class UploadController {
 				Fsii34 = strArray[26].trim();
 				e_Fsii34 = strArray[27].trim();
 				Mod = strArray[28].trim();
-						
-				System.out.println(name + " " + l_Fsiv10 + " " + Fsiv10 + " " + e_Fsiv10 + " " + l_Fneii12 + " " + Fneii12 + " " + e_Fneii12 + " " + l_Fnev14 + " " + Fnev14 + " " + e_Fnev14 + " " + l_Fneiii15 + " " + Fneiii15 + " " + e_Fneiii15 + 
+				
+				String[] ionArray = {"Fsiv10", "Fneii12", "Fnev14", "Fneiii15", "Fsiii18", "Fnev24", "Foiv25", "Fsiii33", "Fsii34"};
+				String[] flagArray = {l_Fsiv10, l_Fneii12, l_Fnev14, l_Fneiii15, l_Fsiii18, l_Fnev24, l_Foiv25, l_Fsiii33, l_Fsii34};
+				String[] valArray = {Fsiv10, Fneii12, Fnev14, Fneiii15, Fsiii18, Fnev24, Foiv25, Fsiii33, Fsii34};
+				String[] errArray = {e_Fsiv10, e_Fneii12, e_Fnev14, e_Fneiii15, e_Fsiii18, e_Fnev24, e_Foiv25, e_Fsiii33, e_Fsii34};
+				
+				/*System.out.println(name + " " + l_Fsiv10 + " " + Fsiv10 + " " + e_Fsiv10 + " " + l_Fneii12 + " " + Fneii12 + " " + e_Fneii12 + " " + l_Fnev14 + " " + Fnev14 + " " + e_Fnev14 + " " + l_Fneiii15 + " " + Fneiii15 + " " + e_Fneiii15 + 
 						" " + l_Fsiii18 + " " + Fsiii18 + " " + e_Fsiii18 + " " + l_Fnev24 + " " +	Fnev24 + " " + e_Fnev24 + " " + l_Foiv25 + " " + Foiv25 + " " + e_Foiv25 + " " + l_Fsiii33 + " " + Fsiii33 + " " + e_Fsiii33 + " " + l_Fsii34 + " " + Fsii34 + " " + e_Fsii34 + " " + Mod);
 				System.out.println();
 					
@@ -304,14 +312,29 @@ public class UploadController {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				//
+				//*/
 
 					
 				if( name == null || name == ""){ //end of the file, so break
 					break;
-				}		
-						
-				//aggiungi i valori alle varie entità e salvale nel db				
+				}
+				
+				SpitzerRowRepository spr = new SpitzerRowRepository();
+				for (int i=0; i < ionArray.length; i++) {
+					//bisogna vedere i controlli degli errori
+					SpitzerRow row = new SpitzerRow();
+					row.setGalaxy(name);
+					row.setIon(ionArray[i]);
+					row.setErr(Float.parseFloat(errArray[i]));
+					row.setVal(Float.parseFloat(valArray[i]));
+					if (flagArray[i].equals("")) {
+						row.setFlag(false);
+					} else {
+						row.setFlag(true);
+					}
+					spr.persist(row);
+				}
+				GalaxyRepository gr = new GalaxyRepository();
 			}
 			crunchifyBuffer.close();
 		}
