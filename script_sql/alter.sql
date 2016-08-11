@@ -1,1 +1,0 @@
-drop table alternative_name
