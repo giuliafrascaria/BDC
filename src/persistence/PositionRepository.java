@@ -23,18 +23,20 @@ public class PositionRepository {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		//cambiare i valori
-		final String insert = "insert into galaxies(raH, raM, raS, deSgn, deD, deM, deS, redShift, galaxy) values (?,?,?,?,?,?,?,?,?)";
+		final String insert = "insert into position(raH, raM, raS, deSgn, deD, deM, deS, redShift, galaxy) values (?,?,?,?,?,?,?,?,?)";
 		//
 		try{		
 			connection = this.dataSource.getConnection();
 	
 			if (findByPrimaryKey(position.getGalaxy()) != null) {
+				return;
 				//vanno aggiornati i valori
 			}
 			
 			//se la galassia non è nel DB ne creiamo una con tutti i campi nulli tranne il nome (mi pare galli avesse detto di fare cosi)
 			GalaxyRepository rep = new GalaxyRepository();
 			if (rep.findByPrimaryKey(position.getGalaxy()) == null) {
+				System.out.println("galassia non trovata: " + position.getGalaxy());
 				Galaxy galaxy = new Galaxy();
 				galaxy.setName(position.getGalaxy());
 				rep.persist(galaxy);
@@ -75,7 +77,7 @@ public class PositionRepository {
 		PreparedStatement statement = null;
 		Position position = null;
 		ResultSet result = null;
-		final String query = "select * from positions where galaxy=?";
+		final String query = "select * from position where galaxy=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();

@@ -22,12 +22,13 @@ public class GalaxyRepository {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		//cambiare i valori
-		final String insert = "insert into galaxies(distance, metalErr, metalFlag, name, spectralClass, IRSmode) values (?,?,?,?,?,?)";
+		final String insert = "insert into galaxy(distance, metalErr, metalVal, name, spectralClass, IRSmode) values (?,?,?,?,?,?)";
 		//
 		try{		
 			connection = this.dataSource.getConnection();
 	
 			if (findByPrimaryKey(galaxy.getName()) != null) {
+				return;
 				//vanno aggiornati i valori
 			}
 	
@@ -63,7 +64,7 @@ public class GalaxyRepository {
 		PreparedStatement statement = null;
 		Galaxy galaxy = null;
 		ResultSet result = null;
-		final String query = "select * from galaxies where name=?";
+		final String query = "select * from galaxy where name=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();
@@ -77,7 +78,7 @@ public class GalaxyRepository {
 					galaxy = new Galaxy();
 					galaxy.setDistance(result.getFloat("distance"));
 					galaxy.setMetalErr(result.getFloat("metalErr"));
-					galaxy.setMetalVal(result.getFloat("metalFlag"));
+					galaxy.setMetalVal(result.getFloat("metalVal"));
 					galaxy.setName(result.getString("name"));
 					galaxy.setSpectralClass(result.getString("spectralClass"));
 					galaxy.setIRSmode(result.getString("IRSmode"));
@@ -105,7 +106,7 @@ public class GalaxyRepository {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet result = null;
-		final String query = "update galaxies set IRSmode=? where name=?";
+		final String query = "update galaxy set IRSmode=? where name=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();

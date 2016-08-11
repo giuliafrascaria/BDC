@@ -23,7 +23,7 @@ public class SpitzerRowRepository {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		//cambiare i valori
-		final String insert = "insert into galaxies(ion, flag, val, err, galaxy) values (?,?,?,?,?)";
+		final String insert = "insert into flux_spitzer(ion, flag, val, err, galaxy) values (?,?,?,?,?)";
 		//
 		try{		
 			connection = this.dataSource.getConnection();
@@ -63,7 +63,7 @@ public class SpitzerRowRepository {
 		PreparedStatement statement = null;
 		SpitzerRow row = null;
 		ResultSet result = null;
-		final String query = "select * from spitzerRow where galaxy=? and ion=?";
+		final String query = "select * from flux_spitzer where galaxy=? and ion=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();

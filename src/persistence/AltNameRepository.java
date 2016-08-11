@@ -22,12 +22,13 @@ public class AltNameRepository {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		//cambiare i valori
-		final String insert = "insert into galaxies(name, galaxy,) values (?,?)";
+		final String insert = "insert into alternative_name(name, galaxy) values (?,?)";
 		//
 		try{		
 			connection = this.dataSource.getConnection();
 	
 			if (findByPrimaryKey(alt.getName()) != null) {
+				return;
 				//vanno aggiornati i valori
 			}
 	
@@ -59,7 +60,7 @@ public class AltNameRepository {
 		PreparedStatement statement = null;
 		AlternativeName alt = null;
 		ResultSet result = null;
-		final String query = "select * from altName where name=?";
+		final String query = "select * from alternative_name where name=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();

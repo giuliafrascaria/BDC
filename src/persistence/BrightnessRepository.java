@@ -22,12 +22,13 @@ public class BrightnessRepository {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		//cambiare i valori
-		final String insert = "insert into galaxies(ion, flag, val, galaxy) values (?,?,?,?)";
+		final String insert = "insert into brightness(ion, flag, val, galaxy) values (?,?,?,?)";
 		//
 		try{		
 			connection = this.dataSource.getConnection();
 	
 			if (findByPrimaryKey(brightness.getGalaxy(), brightness.getIon()) != null) {
+				return;
 				//vanno aggiornati i valori
 			}
 	
@@ -61,7 +62,7 @@ public class BrightnessRepository {
 		PreparedStatement statement = null;
 		Brightness brightness = null;
 		ResultSet result = null;
-		final String query = "select * from galaxies where galaxy=? and ion=?";
+		final String query = "select * from brightness where galaxy=? and ion=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();

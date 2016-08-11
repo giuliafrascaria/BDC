@@ -82,8 +82,10 @@ public class UploadController {
 				JOptionPane.showMessageDialog(null, "Il file immesso non esiste", "Errore", JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente, riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente, riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
 			}
 			
 			long currentTime = Calendar.getInstance().getTimeInMillis() - time;
@@ -106,9 +108,8 @@ public class UploadController {
 						dem = "", des = "", red = "", d = "", sp = "", l_lnev1 = "",
 						l_lnev2 = "", l_loiv = "", lnev = "", lne2 = "", lnoiv = "",
 						z = "", e_z = "", aName = "";
-				
+			
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
-					
 				String[] strArray = crunchifyLine.split(";");
 										
 				name = strArray[0].trim();
@@ -150,6 +151,7 @@ public class UploadController {
 				
 				Galaxy galaxy = new Galaxy();
 				if (name.equals("")) {
+					System.out.println("non dovrei");
 					//errore la galsssia deve avere un nome
 					JOptionPane.showMessageDialog(null, "Alcune galassie mancano del nome e non possono essere salvate", "Errore", JOptionPane.ERROR_MESSAGE);
 					continue;
@@ -177,6 +179,7 @@ public class UploadController {
 					JOptionPane.showMessageDialog(null, "La galassia " + name + " non è stata salvata perchè manca di posizione", "Errore", JOptionPane.ERROR_MESSAGE);
 					continue;
 				}
+				pos.setGalaxy(name);
 				pos.setRaH(Float.parseFloat(rah));
 				pos.setRaM(Float.parseFloat(ram));
 				pos.setRaS(Float.parseFloat(ras));
