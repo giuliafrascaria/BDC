@@ -1,0 +1,11 @@
+CREATE TABLE galaxy
+(
+	name character varying(64) NOT NULL,
+	spectralClass character varying(64) NOT NULL,
+	IRSmode character varying(64),
+	distance float,
+	metalErr float,
+	metalVal float,
+	
+	CONSTRAINT pk_galaxy PRIMARY KEY (name)
+)
