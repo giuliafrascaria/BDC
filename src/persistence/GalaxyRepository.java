@@ -170,15 +170,15 @@ public class GalaxyRepository {
 	public void adIRS(String name, String mode) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		final String query = "update galaxy set IRSmode=? where name=?";
+		final String update = "update galaxy set IRSmode=? where name=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();
 			
-			statement = connection.prepareStatement(query);
+			statement = connection.prepareStatement(update);
 			statement.setString(1, mode);
 			statement.setString(2, name);
-			statement.executeQuery();
+			statement.executeUpdate();
 			
 		}finally{
 			// release resources

@@ -15,6 +15,7 @@ import entity.Brightness;
 import entity.Galaxy;
 import entity.Position;
 import entity.SpitzerRow;
+import exceptions.GalaxyNotExistsException;
 import persistence.AltNameRepository;
 import persistence.BrightnessRepository;
 import persistence.GalaxyRepository;
@@ -84,7 +85,7 @@ public class UploadController {
 				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente, riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente, riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente.\nAssicurarsi di aver selezionato il tipo di file corretto o riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 			
@@ -110,6 +111,11 @@ public class UploadController {
 						z = "", e_z = "", aName = "";
 			
 			boolean allSaved = true;
+			
+			GalaxyRepository gr = new GalaxyRepository();
+			PositionRepository pr = new PositionRepository();
+			BrightnessRepository br = new BrightnessRepository();
+			AltNameRepository ar = new AltNameRepository();
 			
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
 				String[] strArray = crunchifyLine.split(";");
@@ -174,13 +180,10 @@ public class UploadController {
 				pos.setDeS(Float.parseFloat(des));
 				pos.setRedShift(Float.parseFloat(red));
 				
-				GalaxyRepository gr = new GalaxyRepository();
 				gr.persist(galaxy);
 				
-				PositionRepository pr = new PositionRepository();
 				pr.persist(pos);
 				
-				BrightnessRepository br = new BrightnessRepository();
 				if (!lnev.equals("")) {
 					Brightness br1 = new Brightness();
 					br1.setIon("NeV14.3");
@@ -222,7 +225,6 @@ public class UploadController {
 				
 				if (!aName.equals("")) {
 					String[] strAltNames = aName.split(",");
-					AltNameRepository ar = new AltNameRepository();
 					for (String n : strAltNames) {
 						n = n.trim();
 						AlternativeName alt = new AlternativeName();
@@ -250,11 +252,13 @@ public class UploadController {
 							l_Fsiii18 = "", Fsiii18 = "", e_Fsiii18 = "", l_Fnev24 = "", Fnev24 = "", e_Fnev24 = "",
 							l_Foiv25 = "", Foiv25 = "", e_Foiv25 = "", l_Fsiii33 = "", Fsiii33 = "", e_Fsiii33 = "", 
 							l_Fsii34 = "", Fsii34 = "", e_Fsii34 = "", Mod = "";
-				
+			
+			GalaxyRepository gr = new GalaxyRepository();
+			
+			boolean allSaved = true;
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
-					
 				String[] strArray = crunchifyLine.split(";");
-										
+				
 				name = strArray[0].trim();
 				l_Fsiv10 = strArray[1].trim(); 
 				Fsiv10 = strArray[2].trim();
@@ -289,19 +293,6 @@ public class UploadController {
 				String[] flagArray = {l_Fsiv10, l_Fneii12, l_Fnev14, l_Fneiii15, l_Fsiii18, l_Fnev24, l_Foiv25, l_Fsiii33, l_Fsii34};
 				String[] valArray = {Fsiv10, Fneii12, Fnev14, Fneiii15, Fsiii18, Fnev24, Foiv25, Fsiii33, Fsii34};
 				String[] errArray = {e_Fsiv10, e_Fneii12, e_Fnev14, e_Fneiii15, e_Fsiii18, e_Fnev24, e_Foiv25, e_Fsiii33, e_Fsii34};
-				
-				/*System.out.println(name + " " + l_Fsiv10 + " " + Fsiv10 + " " + e_Fsiv10 + " " + l_Fneii12 + " " + Fneii12 + " " + e_Fneii12 + " " + l_Fnev14 + " " + Fnev14 + " " + e_Fnev14 + " " + l_Fneiii15 + " " + Fneiii15 + " " + e_Fneiii15 + 
-						" " + l_Fsiii18 + " " + Fsiii18 + " " + e_Fsiii18 + " " + l_Fnev24 + " " +	Fnev24 + " " + e_Fnev24 + " " + l_Foiv25 + " " + Foiv25 + " " + e_Foiv25 + " " + l_Fsiii33 + " " + Fsiii33 + " " + e_Fsiii33 + " " + l_Fsii34 + " " + Fsii34 + " " + e_Fsii34 + " " + Mod);
-				System.out.println();
-					
-				//aspetto per prova della finestra di attesa
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//*/
-
 					
 				if( name == null || name == ""){ //end of the file, so break
 					break;
@@ -309,22 +300,34 @@ public class UploadController {
 				
 				SpitzerRowRepository spr = new SpitzerRowRepository();
 				for (int i=0; i < ionArray.length; i++) {
-					//bisogna vedere i controlli degli errori
 					SpitzerRow row = new SpitzerRow();
+					if (valArray[i].equals("")) {
+						continue;
+					}
 					row.setGalaxy(name);
 					row.setIon(ionArray[i]);
-					row.setErr(Float.parseFloat(errArray[i]));
-					row.setVal(Float.parseFloat(valArray[i]));
+					row.setErr(errArray[i]);
+					row.setVal(valArray[i]);
 					if (flagArray[i].equals("")) {
 						row.setFlag(false);
 					} else {
 						row.setFlag(true);
 					}
-					spr.persist(row);
+					try {
+						spr.persist(row);
+					} catch (GalaxyNotExistsException e) {
+						allSaved = false;
+						continue;
+					}
 				}
-				GalaxyRepository gr = new GalaxyRepository();
+				if (!Mod.equals("")) {
+					gr.adIRS(name, Mod);
+				}
 			}
 			crunchifyBuffer.close();
+			if (!allSaved) {
+				JOptionPane.showMessageDialog(null, "Alcuni flussi non sono stati salvati, poichè nel database non esiste la galassia a cui si riferiscono. Registrare la galassia e poi riprovare.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 		private void readContPacs() throws IOException{

@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -80,8 +79,6 @@ public class WaitingGUI extends JFrame {
 		contentPane.setLayout(null);
 		JLabel lblBackground = new JLabel();	
 		lblBackground.setIcon(new ImageIcon("./resource/ajax-document-loader.gif"));
-		File f = new File("./resource/ajax-document-loader.gif");
-		System.out.println(f.exists());
 		lblBackground.setBounds(0, 0, 320, 224);
 		lblBackground.setFocusable(true);
 		contentPane.add(lblBackground);
