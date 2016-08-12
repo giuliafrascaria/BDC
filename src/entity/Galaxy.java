@@ -1,34 +1,34 @@
 package entity;
 
 public class Galaxy {
-	private float distance;
-	private float metalErr;
-	private float metalVal;
+	private String distance;
+	private String metalErr;
+	private String metalVal;
 	private String name;
 	private String spectralClass;
 	private String IRSmode;
 
-	public float getDistance() {
+	public String getDistance() {
 		return distance;
 	}
 	
-	public void setDistance(float distance) {
+	public void setDistance(String distance) {
 		this.distance = distance;
 	}
 	
-	public float getMetalErr() {
+	public String getMetalErr() {
 		return metalErr;
 	}
 	
-	public void setMetalErr(float metalErr) {
+	public void setMetalErr(String metalErr) {
 		this.metalErr = metalErr;
 	}
 	
-	public float getMetalVal() {
+	public String getMetalVal() {
 		return metalVal;
 	}
 	
-	public void setMetalVal(float metalVal) {
+	public void setMetalVal(String metalVal) {
 		this.metalVal = metalVal;
 	}
 	

@@ -13,23 +13,24 @@ public class BrightnessRepository {
 	public BrightnessRepository() {
 		dataSource = new DataSource();
 	}
+	
 	/**
-	 * Store a galaxy into the DB
-	 * @param galaxy instance of Galaxy to be stored
+	 * Store a brightness into the DB
+	 * @param brightness instance of Brightness to be stored
 	 * @throws SQLException Throws SQLException if closing functions fail
 	 */
 	public void persist(Brightness brightness) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		//cambiare i valori
+		
 		final String insert = "insert into brightness(ion, flag, val, galaxy) values (?,?,?,?)";
-		//
+		
 		try{		
 			connection = this.dataSource.getConnection();
 	
 			if (findByPrimaryKey(brightness.getGalaxy(), brightness.getIon()) != null) {
+				update(brightness);
 				return;
-				//vanno aggiornati i valori
 			}
 	
 			statement = connection.prepareStatement(insert);
@@ -51,10 +52,37 @@ public class BrightnessRepository {
 		}
 	}
 	
+	public void update (Brightness br) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		final String update = "update brightness set flag=?, val=? where galaxy=? and ion=?";
+		
+		try{		
+			connection = this.dataSource.getConnection();
+			
+			statement = connection.prepareStatement(update);
+			statement.setBoolean(1, br.isFlag());
+			statement.setFloat(2, br.getVal());
+			statement.setString(3, br.getGalaxy());
+			statement.setString(4, br.getIon());
+			statement.executeUpdate();
+			
+		}finally{
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+	}
+	
 	/**
-	 * Find a galaxy by primary key
-	 * @param name Primary key value
-	 * @return returns the found galaxy instance
+	 * Find a brightness by primary key
+	 * @param galaxyName Primary key value
+	 * @param ion Primary key value
+	 * @return returns the found brightness instance
 	 * @throws SQLException Throws SQLException if closing functions fail
 	 */
 	public Brightness findByPrimaryKey(String galaxyName, String ion) throws Exception {

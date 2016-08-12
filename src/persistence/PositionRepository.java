@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import entity.Galaxy;
 import entity.Position;
 
 public class PositionRepository {	
@@ -14,32 +13,24 @@ public class PositionRepository {
 	public PositionRepository() {
 		dataSource = new DataSource();
 	}
+	
 	/**
 	 * Store a position into the DB
-	 * @param posiztion instance of Position to be stored
+	 * @param position instance of Position to be stored
 	 * @throws SQLException Throws SQLException if closing functions fail
 	 */
 	public void persist(Position position) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		//cambiare i valori
+		
 		final String insert = "insert into position(raH, raM, raS, deSgn, deD, deM, deS, redShift, galaxy) values (?,?,?,?,?,?,?,?,?)";
-		//
+		
 		try{		
 			connection = this.dataSource.getConnection();
 	
 			if (findByPrimaryKey(position.getGalaxy()) != null) {
+				update (position);
 				return;
-				//vanno aggiornati i valori
-			}
-			
-			//se la galassia non è nel DB ne creiamo una con tutti i campi nulli tranne il nome (mi pare galli avesse detto di fare cosi)
-			GalaxyRepository rep = new GalaxyRepository();
-			if (rep.findByPrimaryKey(position.getGalaxy()) == null) {
-				System.out.println("galassia non trovata: " + position.getGalaxy());
-				Galaxy galaxy = new Galaxy();
-				galaxy.setName(position.getGalaxy());
-				rep.persist(galaxy);
 			}
 	
 			statement = connection.prepareStatement(insert);
@@ -56,6 +47,42 @@ public class PositionRepository {
 
 		}
 		finally{
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+	}
+	
+	/**
+	 * Update an existing position of the DB
+	 * @param pos Position instance to be updated
+	 * @throws SQLException Throws SQLException if closing functions fail
+	 */
+	public void update (Position pos) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		final String update = "update position set raH=?, raM=?, raS=?, deSgn=?, deD=?, deM=?, deS=?, redShift=? where galaxy=?";
+		
+		try{		
+			connection = this.dataSource.getConnection();
+			
+			statement = connection.prepareStatement(update);
+			statement.setFloat(1, pos.getRaH());
+			statement.setFloat(2, pos.getRaM());
+			statement.setFloat(3, pos.getRaS());
+			statement.setBoolean(4, pos.getDeSgn());
+			statement.setFloat(5, pos.getDeD());
+			statement.setFloat(6, pos.getDeM());
+			statement.setFloat(7, pos.getDeS());
+			statement.setFloat(8, pos.getRedShift());
+			statement.setString(9, pos.getGalaxy());
+			statement.executeUpdate();
+			
+		}finally{
 			// release resources
 			if(statement != null){
 				statement.close();
