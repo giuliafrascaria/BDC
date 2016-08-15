@@ -4,8 +4,8 @@ public class PacsRow {
 	
 	private String ion;
 	private String galaxy;
-	private float val;
-	private float err;
+	private String val;
+	private String err;
 	private boolean flag;
 	private String aperture;
 	
@@ -25,19 +25,19 @@ public class PacsRow {
 		this.flag = flag;
 	}
 	
-	public float getVal() {
+	public String getVal() {
 		return val;
 	}
 	
-	public void setVal(float val) {
+	public void setVal(String val) {
 		this.val = val;
 	}
 	
-	public float getErr() {
+	public String getErr() {
 		return err;
 	}
 	
-	public void setErr(float err) {
+	public void setErr(String err) {
 		this.err = err;
 	}
 

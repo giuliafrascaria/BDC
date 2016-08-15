@@ -5,32 +5,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import entity.SpitzerRow;
+import entity.PacsRow;
 import exceptions.GalaxyNotExistsException;
 
-
-public class SpitzerRowRepository {
+public class PacsRowRepository {
 	private DataSource dataSource;
 
-	public SpitzerRowRepository() {
+	public PacsRowRepository() {
 		dataSource = new DataSource();
 	}
-	
+
 	/**
-	 * Store a flux_spitzer into the DB
-	 * @param row instance of SpitzerRow to be stored
+	 * Store a flux_pacs into the DB
+	 * @param row instance of PacsRow to be stored
 	 * @throws SQLException Throws SQLException if closing functions fail
 	 */
-	public void persist(SpitzerRow row) throws Exception {
+	public void persist(PacsRow row) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		
-		final String insert = "insert into flux_spitzer(ion, flag, val, error, galaxy) values (?,?,?,?,?)";
+		final String insert = "insert into flux_pacs(ion, flag, val, error, galaxy, aperture) values (?,?,?,?,?,?)";
 		
 		try{		
 			connection = this.dataSource.getConnection();
 	
-			if (findByPrimaryKey(row.getGalaxy(), row.getIon()) != null) {
+			if (findByPrimaryKey(row.getGalaxy(), row.getIon(), row.getAperture()) != null) {
 				update(row);
 				return;
 			}
@@ -53,6 +52,7 @@ public class SpitzerRowRepository {
 				statement.setFloat(4, Float.parseFloat(row.getErr()));
 			}
 			statement.setString(5, row.getGalaxy());
+			statement.setString(6, row.getAperture());
 			statement.executeUpdate();
 		}
 		finally{
@@ -67,18 +67,19 @@ public class SpitzerRowRepository {
 	}
 	
 	/**
-	 * Find a flux_spitzer by primary key
+	 * Find a flux_pacs by primary key
 	 * @param name Primary key value
 	 * @param ion Primary Key value
-	 * @return returns the found SpitzerRow instance
+	 * @param aperture Primary Key value
+	 * @return returns the found PacsRow instance
 	 * @throws SQLException Throws SQLException if closing functions fail
 	 */
-	public SpitzerRow findByPrimaryKey(String galaxy, String ion) throws Exception {
+	public PacsRow findByPrimaryKey(String galaxy, String ion, String aperture) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		SpitzerRow row = null;
+		PacsRow row = null;
 		ResultSet result = null;
-		final String query = "select * from flux_spitzer where galaxy=? and ion=?";
+		final String query = "select * from flux_pacs where galaxy=? and ion=? and aperture=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();
@@ -86,14 +87,16 @@ public class SpitzerRowRepository {
 			statement = connection.prepareStatement(query);
 			statement.setString(1, galaxy);
 			statement.setString(2, ion);
+			statement.setString(3, aperture);
 			result = statement.executeQuery();
 			
 			if (result.next()) {
 				if (row == null) {
-					row = new SpitzerRow();
+					row = new PacsRow();
 					row.setIon(result.getString("ion"));
 					row.setErr(String.valueOf(result.getFloat("error")));
 					row.setFlag(result.getBoolean("flag"));
+					row.setAperture(result.getString("aperture"));
 					row.setVal(String.valueOf(result.getFloat("val")));
 					row.setGalaxy(result.getString("galaxy"));
 				}
@@ -117,15 +120,15 @@ public class SpitzerRowRepository {
 	}
 	
 	/**
-	 * Update an existing flux_spitzer into the DB
-	 * @param row instance of SpitzerRow to be updated
+	 * Update an existing flux_pacs into the DB
+	 * @param row instance of PacsRow to be updated
 	 * @throws SQLException Throws SQLException if closing functions fail
 	 */
-	public void update(SpitzerRow row) throws Exception{
+	public void update(PacsRow row) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		final String update = "update flux_spitzer set flag=?, val=?, error=? where galaxy=? and ion=?";
-		
+		final String update = "update flux_pacs set flag=?, val=?, error=? where aperture=? and galaxy=? and ion=?";
+
 		try{		
 			connection = this.dataSource.getConnection();
 			
@@ -137,10 +140,14 @@ public class SpitzerRowRepository {
 			} else {
 				statement.setFloat(3, Float.parseFloat(row.getErr()));
 			}
-			statement.setString(4, row.getGalaxy());
-			statement.setString(5, row.getIon());
+			statement.setString(4, row.getAperture());
+			statement.setString(5, row.getGalaxy());
+			statement.setString(6, row.getIon());
 			statement.executeUpdate();
 			
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}finally{
 			// release resources
 			if(statement != null){
@@ -153,25 +160,27 @@ public class SpitzerRowRepository {
 	}
 	
 	/**
-	 * Delete a flux_spitzer instance from DB
+	 * Delete a flux_pacs instance from DB
 	 * @param name Primary key value
 	 * @param ion Primary Key value
+	 * @param aperture Primary Key value
 	 * @throws SQLException Throws SQLException if closing functions fail
 	 */
-	public void delete(String galaxy, String ion) throws Exception {
-		if (findByPrimaryKey(galaxy, ion) == null) {
+	public void delete(String galaxy, String ion, String aperture) throws Exception {
+		if (findByPrimaryKey(galaxy, ion, aperture) == null) {
 			return;
 		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 
-		final String delete = "delete from flux_spitzer where galaxy=? and ion=?";
+		final String delete = "delete from flux_pacs where galaxy=? and ion=? and aperture=?";
 		
 		try{		
 			connection = this.dataSource.getConnection();
 			statement = connection.prepareStatement(delete);
 			statement.setString(1, galaxy);
 			statement.setString(2, ion);
+			statement.setString(3, aperture);
 			statement.executeUpdate();
 		}
 		finally{

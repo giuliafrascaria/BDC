@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -12,12 +11,16 @@ import boundary.WaitingGUI;
 import entity.AlternativeName;
 import entity.Brightness;
 import entity.Galaxy;
+import entity.PacsContinuousRow;
+import entity.PacsRow;
 import entity.Position;
 import entity.SpitzerRow;
 import exceptions.GalaxyNotExistsException;
 import persistence.AltNameRepository;
 import persistence.BrightnessRepository;
 import persistence.GalaxyRepository;
+import persistence.PacsContRepository;
+import persistence.PacsRowRepository;
 import persistence.PositionRepository;
 import persistence.SpitzerRowRepository;
 
@@ -304,6 +307,10 @@ public class UploadController {
 				for (int i=0; i < ionArray.length; i++) {
 					SpitzerRow row = new SpitzerRow();
 					if (valArray[i].equals("")) {
+						spr.delete(name, ionArray[i]);
+						continue;
+					}
+					if (valArray[i].equals("")) {
 						continue;
 					}
 					row.setGalaxy(name);
@@ -332,7 +339,7 @@ public class UploadController {
 			}
 		}
 		
-		private void readContPacs() throws IOException{
+		private void readContPacs() throws Exception{
 			BufferedReader crunchifyBuffer = null;
 			
 			String crunchifyLine;
@@ -376,32 +383,69 @@ public class UploadController {
 				Ccii158 = strArray[18].trim();
 				e_Ccii158 = strArray[19].trim();
 				Aper = strArray[21].trim();
+				
+				String[] ionArray = {"Coiii52", "Cniii57", "Coi63", "Coiii88", "Cnii122", "Coi145", "Ccii158"};
+				String[] flagArray = {"", "", l_Coi63, l_Coiii88, l_Cnii122, l_Coi145, l_Ccii158};
+				String[] valArray = {Coiii52, Cniii57, Coi63, Coiii88, Cnii122, Coi145, Ccii158};
+				String[] errArray = {e_Coiii52, e_Cniii57, e_Coi63, e_Coiii88, e_Cnii122, e_Coi145, e_Ccii158};
 					
 				if( name == null || name == ""){ //end of the file, so break
 					break;
 				}		
 						
-				//aggiungi i valori alle varie entità e salvale nel db				
+				PacsContRepository pcr = new PacsContRepository();
+				for (int i=0; i < ionArray.length; i++) {
+					PacsContinuousRow cont = new PacsContinuousRow();
+					if (valArray[i].equals("")) {
+						pcr.delete(name, ionArray[i]);
+						continue;
+					}
+					cont.setGalaxy(name);
+					cont.setIon(ionArray[i]);
+					cont.setErr(errArray[i]);
+					cont.setVal(valArray[i]);
+					if (flagArray[i].equals("")) {
+						cont.setFlag(false);
+					} else {
+						cont.setFlag(true);
+					}
+					cont.setAperture(Aper);
+					try {
+						pcr.persist(cont);
+					} catch (GalaxyNotExistsException e) {
+						allSaved = false;
+						continue;
+					}
+				}
 			}
 			crunchifyBuffer.close();
+			if (!allSaved) {
+				JOptionPane.showMessageDialog(null, "Alcuni flussi non sono stati salvati, poichè nel database non esiste la galassia a cui si riferiscono. Registrare la galassia e poi riprovare.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
-		private void readRowPacs() throws IOException{
+		private void readRowPacs() throws Exception{
 			BufferedReader crunchifyBuffer = null;
 			
 			String crunchifyLine;
 			
 			crunchifyBuffer = new BufferedReader(new FileReader(filePath));
 			
+			if (crunchifyBuffer.readLine().split(";").length != 23) {
+				JOptionPane.showMessageDialog(null, "Il file inserito non è del tipo selezionato.\nIl file Pacs riga deve avere 23 campi per riga", "Errore", JOptionPane.ERROR_MESSAGE);
+				crunchifyBuffer.close();
+				return;
+			}
+			
 			String name = "", l_Foiii52 = "", Foiii52 = "", e_Foiii52 = "", l_Fniii57 = "", Fniii57 = "", e_Fniii57 = "", 
 							l_Foi63 = "", Foi63 = "", e_Foi63 = "", l_Foiii88 = "", Foiii88 = "", e_Foiii88 = "", 
 							l_Fnii122 = "", Fnii122 = "", e_Fnii122 = "", l_Foi145 = "", Foi145 = "", e_Foi145 = "", 
 							l_Fcii158 = "", Fcii158 = "", e_Fcii158 = "", Aper = "";
 				
+			boolean allSaved = true;
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
 					
 				String[] strArray = crunchifyLine.split(";");				
-				//crea le entità galassia posizione e luminosità che ti servono
 						
 				name = strArray[0].trim();
 				l_Foiii52 = strArray[1].trim(); 
@@ -426,27 +470,45 @@ public class UploadController {
 				Fcii158 = strArray[20].trim();
 				e_Fcii158 = strArray[21].trim();
 				Aper = strArray[22].trim();
-						
-				System.out.println(name + " " + l_Foiii52 + " " + Foiii52 + " " + e_Foiii52 + " " + l_Fniii57 + " " + Fniii57 + " " + e_Fniii57 + " " + l_Foi63 + " " + Foi63 + " " + e_Foi63 + " " + 
-						" " + l_Foiii88 + " " + Foiii88 + " " + e_Foiii88 + " " + l_Fnii122 + " " +	Fnii122 + " " + e_Fnii122 + " " + l_Foi145 + " " + Foi145 + " " + e_Foi145 + l_Fcii158 + " " + Fcii158 + " " + e_Fcii158  + " " + Aper + " ");
-				System.out.println();
-					
-				//aspetto per prova della finestra di attesa
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//
-
+				
+				String[] ionArray = {"Foiii52", "Fniii57", "Foi63", "Foiii88", "Fnii122", "Foi145", "Fcii158"};
+				String[] flagArray = {l_Foiii52, l_Fniii57, l_Foi63, l_Foiii88, l_Fnii122, l_Foi145, l_Fcii158};
+				String[] valArray = {Foiii52, Fniii57, Foi63, Foiii88, Fnii122, Foi145, Fcii158};
+				String[] errArray = {e_Foiii52, e_Fniii57, e_Foi63, e_Foiii88, e_Fnii122, e_Foi145, e_Fcii158};
 					
 				if( name == null || name == ""){ //end of the file, so break
 					break;
 				}		
 						
-				//aggiungi i valori alle varie entità e salvale nel db				
+				PacsRowRepository prr = new PacsRowRepository();
+				for (int i=0; i < ionArray.length; i++) {
+					PacsRow row = new PacsRow();
+					if (valArray[i].equals("")) {
+						prr.delete(name, ionArray[i], Aper);
+						continue;
+					}
+					row.setGalaxy(name);
+					row.setIon(ionArray[i]);
+					row.setErr(errArray[i]);
+					row.setVal(valArray[i]);
+					if (flagArray[i].equals("")) {
+						row.setFlag(false);
+					} else {
+						row.setFlag(true);
+					}
+					row.setAperture(Aper);
+					try {
+						prr.persist(row);
+					} catch (GalaxyNotExistsException e) {
+						allSaved = false;
+						continue;
+					}
+				}				
 			}
 			crunchifyBuffer.close();
+			if (!allSaved) {
+				JOptionPane.showMessageDialog(null, "Alcuni flussi non sono stati salvati, poichè nel database non esiste la galassia a cui si riferiscono. Registrare la galassia e poi riprovare.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 	}
