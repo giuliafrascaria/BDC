@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
@@ -59,7 +58,6 @@ public class UploadController {
 	private class Upload implements Runnable {
 		private String filePath = "";	
 		private int fileType;
-		private long time;
 		
 		public Upload(String filePath, int fileType) {
 			this.filePath = filePath;
@@ -69,9 +67,7 @@ public class UploadController {
 		@Override
 		public void run() {
 			waiting = new WaitingGUI();
-			
-			time = Calendar.getInstance().getTimeInMillis();
-			
+						
 			try {
 				switch (fileType){
 				case 1: readGalaxies(); break;
@@ -88,14 +84,8 @@ public class UploadController {
 				JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, il file potrebbe non essere stato caricato completamente.\nAssicurarsi di aver selezionato il tipo di file corretto o riprovare più tardi.", "Errore", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
-			
-			long currentTime = Calendar.getInstance().getTimeInMillis() - time;
-			
+						
 			waiting.dispose();
-			
-			JOptionPane.showMessageDialog(null, "Operazione Completata con successo !\nProcesso terminato in: " + String.valueOf((int) currentTime/1000)
-					+ " secondi", "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
-			
 		}
 		
 		private void readGalaxies() throws Exception {
@@ -104,6 +94,12 @@ public class UploadController {
 			String crunchifyLine;
 			
 			crunchifyBuffer = new BufferedReader(new FileReader(filePath));
+			
+			if (crunchifyBuffer.readLine().split(";").length != 26) {
+				JOptionPane.showMessageDialog(null, "Il file inserito non è del tipo selezionato.\nIl file galassie deve avere 26 campi per riga", "Errore", JOptionPane.ERROR_MESSAGE);
+				crunchifyBuffer.close();
+				return;
+			}
 			
 			String name = "",rah = "", ram = "", ras = "", de = "", ded = "",
 						dem = "", des = "", red = "", d = "", sp = "", l_lnev1 = "",
@@ -247,6 +243,12 @@ public class UploadController {
 			
 			crunchifyBuffer = new BufferedReader(new FileReader(filePath));
 			
+			if (crunchifyBuffer.readLine().split(";").length != 30) {
+				JOptionPane.showMessageDialog(null, "Il file inserito non è del tipo selezionato.\nIl file Spitzer deve avere 30 campi per riga", "Errore", JOptionPane.ERROR_MESSAGE);
+				crunchifyBuffer.close();
+				return;
+			}
+			
 			String name = "", l_Fsiv10 = "", Fsiv10 = "", e_Fsiv10 = "", l_Fneii12 = "", Fneii12 = "", e_Fneii12 = "",
 							l_Fnev14 = "", Fnev14 = "", e_Fnev14 = "", l_Fneiii15 = "", Fneiii15 = "", e_Fneiii15 = "",
 							l_Fsiii18 = "", Fsiii18 = "", e_Fsiii18 = "", l_Fnev24 = "", Fnev24 = "", e_Fnev24 = "",
@@ -337,17 +339,22 @@ public class UploadController {
 			
 			crunchifyBuffer = new BufferedReader(new FileReader(filePath));
 			
+			if (crunchifyBuffer.readLine().split(";").length != 22) {
+				JOptionPane.showMessageDialog(null, "Il file inserito non è del tipo selezionato.\nIl file Pacs continuo deve avere 22 campi per riga", "Errore", JOptionPane.ERROR_MESSAGE);
+				crunchifyBuffer.close();
+				return;
+			}
+			
 			String name = "", Coiii52 = "", e_Coiii52 = "", Cniii57 = "", e_Cniii57 = "",
 							l_Coi63 = "", Coi63 = "", e_Coi63 = "", l_Coiii88 = "", Coiii88 = "", e_Coiii88 = "",
 							l_Cnii122 = "", Cnii122 = "", e_Cnii122 = "", l_Coi145 = "", Coi145 = "", e_Coi145 = "",
 							l_Ccii158 = "", Ccii158 = "", e_Ccii158 = "", Aper = "";
 				
+			boolean allSaved = true;
 			while ((crunchifyLine = crunchifyBuffer.readLine()) != null) {
 					
 				String[] strArray = crunchifyLine.split(";");
-				
-				//crea le entità galassia posizione e luminosità che ti servono
-						
+										
 				name = strArray[0].trim();
 				Coiii52 = strArray[1].trim(); 
 				e_Coiii52 = strArray[2].trim();
@@ -369,19 +376,6 @@ public class UploadController {
 				Ccii158 = strArray[18].trim();
 				e_Ccii158 = strArray[19].trim();
 				Aper = strArray[21].trim();
-						
-				System.out.println(name + " " + Coiii52 + " " + e_Coiii52 + " " + Cniii57 + " " + e_Cniii57 + " " + l_Coi63 + " " + Coi63 + " " + e_Coi63 + " " + l_Coiii88 + " " + Coiii88 + " " + e_Coiii88 + " " + 
-						" " + l_Cnii122 + " " + Cnii122 + " " + e_Cnii122 + " " + l_Coi145 + " " +	Coi145 + " " + e_Coi145 + " " + l_Ccii158 + " " + Ccii158 + " " + e_Ccii158 + " " + Aper + " ");
-				System.out.println();
-					
-				//aspetto per prova della finestra di attesa
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//
-
 					
 				if( name == null || name == ""){ //end of the file, so break
 					break;

@@ -65,7 +65,7 @@ public class SpitzerRowRepository {
 		}
 	}
 	
-	/**
+	/**26 23 22 30 23
 	 * Find a flux_spitzer by primary key
 	 * @param name Primary key value
 	 * @param ion Primary Key value
@@ -130,8 +130,16 @@ public class SpitzerRowRepository {
 			
 			statement = connection.prepareStatement(update);
 			statement.setBoolean(1, row.isFlag());
-			statement.setFloat(2, Float.parseFloat(row.getVal()));
-			statement.setFloat(3, Float.parseFloat(row.getErr()));
+			if (row.getVal().equals("")) {
+				statement.setNull(2, java.sql.Types.FLOAT);
+			} else {
+				statement.setFloat(2, Float.parseFloat(row.getVal()));
+			}
+			if (row.getErr().equals("")) {
+				statement.setNull(3, java.sql.Types.FLOAT);
+			} else {
+				statement.setFloat(3, Float.parseFloat(row.getErr()));
+			}
 			statement.setString(4, row.getGalaxy());
 			statement.setString(5, row.getIon());
 			statement.executeUpdate();
