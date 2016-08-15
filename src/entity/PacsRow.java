@@ -2,7 +2,6 @@ package entity;
 
 public class PacsRow {
 	
-		
 	private String ion;
 	private String galaxy;
 	private float val;
@@ -10,78 +9,53 @@ public class PacsRow {
 	private boolean flag;
 	private String aperture;
 	
-	
-	public String getIon()
-	{
+	public String getIon() {
 		return ion;
 	}
 	
-	
-	public void setIon(String ion) 
-	{
+	public void setIon(String ion) {
 		this.ion = ion;
 	}
 	
-	
-	public boolean isFlag() 
-	{
+	public boolean isFlag() {
 		return flag;
 	}
 	
-	
-	public void setFlag(boolean flag) 
-	{
+	public void setFlag(boolean flag) {
 		this.flag = flag;
 	}
 	
-	
-	public float getVal()
-	{
+	public float getVal() {
 		return val;
 	}
 	
-	
-	public void setVal(float val) 
-	{
+	public void setVal(float val) {
 		this.val = val;
 	}
 	
-	
-	public float getErr() 
-	{
+	public float getErr() {
 		return err;
 	}
 	
-	
-	public void setErr(float err) 
-	{
+	public void setErr(float err) {
 		this.err = err;
 	}
-	
 
-	public String getGalaxy() 
-	{
+	public String getGalaxy() {
 		return galaxy;
 	}
 
-	
-	public void setGalaxy(String galaxy) 
-	{
+	public void setGalaxy(String galaxy) {
 		this.galaxy = galaxy;
 	}
 	
-	
-	public String getAperture()
-	{
+	public String getAperture() {
 		return aperture;
 	}
 	
-	
-	public void setAperture(String aperture)
-	{
+	public void setAperture(String aperture){
 		this.aperture = aperture;
 	}
-	
 }
 
  
