@@ -1,37 +1,37 @@
 package entity;
 
 public class Position {
-	private float raH;
-	private float raM;
-	private float raS;
+	private String raH;
+	private String raM;
+	private String raS;
 	private boolean deSgn;//true if +, false if -
-	private float deD;
-	private float deM;
-	private float deS;
-	private float redShift;
+	private String deD;
+	private String deM;
+	private String deS;
+	private String redShift;
 	private String galaxy;
 	
-	public float getRaH() {
+	public String getRaH() {
 		return raH;
 	}
 	
-	public void setRaH(float raH) {
+	public void setRaH(String raH) {
 		this.raH = raH;
 	}
 	
-	public float getRaM() {
+	public String getRaM() {
 		return raM;
 	}
 	
-	public void setRaM(float raM) {
+	public void setRaM(String raM) {
 		this.raM = raM;
 	}
 	
-	public float getRaS() {
+	public String getRaS() {
 		return raS;
 	}
 	
-	public void setRaS(float raS) {
+	public void setRaS(String raS) {
 		this.raS = raS;
 	}
 	
@@ -43,35 +43,35 @@ public class Position {
 		this.deSgn = desgn;
 	}
 	
-	public float getDeD() {
+	public String getDeD() {
 		return deD;
 	}
 	
-	public void setDeD(float deD) {
+	public void setDeD(String deD) {
 		this.deD = deD;
 	}
 	
-	public float getDeM() {
+	public String getDeM() {
 		return deM;
 	}
 	
-	public void setDeM(float deM) {
+	public void setDeM(String deM) {
 		this.deM = deM;
 	}
 	
-	public float getDeS() {
+	public String getDeS() {
 		return deS;
 	}
 	
-	public void setDeS(float deS) {
+	public void setDeS(String deS) {
 		this.deS = deS;
 	}
 	
-	public float getRedShift() {
+	public String getRedShift() {
 		return redShift;
 	}
 	
-	public void setRedShift(float redShift) {
+	public void setRedShift(String redShift) {
 		this.redShift = redShift;
 	}
 

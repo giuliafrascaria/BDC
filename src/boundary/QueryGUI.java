@@ -7,8 +7,12 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import controller.QueryController;
+import exceptions.GalaxyNotExistsException;
 
 public class QueryGUI {
 
@@ -27,6 +31,7 @@ public class QueryGUI {
 	private LogoutAL LogoutActionListener;
 	private HomeAL HomeActionListener;
 	private BackAL BackActionListener;
+	private QueryAL QueryActionListener;
 	
 	private void setMainPanel(JPanel mainPanel) {
 		this.mainPanel = mainPanel;
@@ -67,7 +72,7 @@ public class QueryGUI {
 		
 		switch (queryType) {
 			case 1: lblSubTitle.setText("Ricerca per nome");
-					lblInput1 = new JLabel("Numero massimo di galassie da restituire:");
+					lblInput1 = new JLabel("nome della galassia (Key Sensitive):");
 					lblInput1.setBounds(106, 210, 306, 15);
 					mainPanel.add(lblInput1);
 	
@@ -132,13 +137,30 @@ public class QueryGUI {
 		
 		HomeActionListener = new HomeAL();
 		LogoutActionListener = new LogoutAL();	
-		BackActionListener = new BackAL();		
+		BackActionListener = new BackAL();
+		QueryActionListener = new QueryAL();
 		
+		btnQueryPerforme.addActionListener(QueryActionListener);
 		btnBack.addActionListener(BackActionListener);
 		btnLogout.addActionListener(LogoutActionListener);
 		btnHome.addActionListener(HomeActionListener);
 		
 		mainPanel.updateUI();
+	}
+	
+	private class QueryAL implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			QueryController cntr = QueryController.getInstance();
+			try {
+				String[] input = {txtInput1.getText()};
+				String[][] result =cntr.findGalaxy(txtInput1.getText());
+				new ResultGUI(accountType, mainPanel, 1, input, result);
+			} catch (GalaxyNotExistsException e) {
+				JOptionPane.showMessageDialog(null, "La galassia '" + e.getName() + "' non esiste. \nRicorda di fare attenzione alle maiuscole e minuscole." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private class LogoutAL implements ActionListener {

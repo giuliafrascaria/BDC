@@ -135,9 +135,21 @@ public class GalaxyRepository {
 			if (result.next()) {
 				if (galaxy == null) {
 					galaxy = new Galaxy();
-					galaxy.setDistance(String.valueOf(result.getFloat("distance")));
+					if (result.getString("distance") == null) {
+						galaxy.setDistance("/");
+					} else {
+						galaxy.setDistance(String.valueOf(result.getFloat("distance")));
+					}
+					if (result.getString("metalErr") == null) {
+						galaxy.setMetalErr("/");
+					} else {
 					galaxy.setMetalErr(String.valueOf(result.getFloat("metalErr")));
+					}
+					if (result.getString("metalVal") == null) {
+						galaxy.setMetalVal("/");
+					} else {
 					galaxy.setMetalVal(String.valueOf(result.getFloat("metalVal")));
+					}
 					galaxy.setName(result.getString("name"));
 					galaxy.setSpectralClass(result.getString("spectralClass"));
 					galaxy.setIRSmode(result.getString("IRSmode"));

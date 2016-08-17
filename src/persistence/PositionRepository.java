@@ -34,14 +34,14 @@ public class PositionRepository {
 			}
 	
 			statement = connection.prepareStatement(insert);
-			statement.setFloat(1, position.getRaH());
-			statement.setFloat(2, position.getRaM());
-			statement.setFloat(3, position.getRaS());
+			statement.setFloat(1, Float.parseFloat(position.getRaH()));
+			statement.setFloat(2, Float.parseFloat(position.getRaM()));
+			statement.setFloat(3, Float.parseFloat(position.getRaS()));
 			statement.setBoolean(4, position.getDeSgn());
-			statement.setFloat(5, position.getDeD());
-			statement.setFloat(6, position.getDeM());
-			statement.setFloat(7, position.getDeS());
-			statement.setFloat(8, position.getRedShift());
+			statement.setFloat(5, Float.parseFloat(position.getDeD()));
+			statement.setFloat(6, Float.parseFloat(position.getDeM()));
+			statement.setFloat(7, Float.parseFloat(position.getDeS()));
+			statement.setFloat(8, Float.parseFloat(position.getRedShift()));
 			statement.setString(9, position.getGalaxy());
 			statement.executeUpdate();
 
@@ -71,14 +71,14 @@ public class PositionRepository {
 			connection = this.dataSource.getConnection();
 			
 			statement = connection.prepareStatement(update);
-			statement.setFloat(1, pos.getRaH());
-			statement.setFloat(2, pos.getRaM());
-			statement.setFloat(3, pos.getRaS());
+			statement.setFloat(1, Float.parseFloat(pos.getRaH()));
+			statement.setFloat(2, Float.parseFloat(pos.getRaM()));
+			statement.setFloat(3, Float.parseFloat(pos.getRaS()));
 			statement.setBoolean(4, pos.getDeSgn());
-			statement.setFloat(5, pos.getDeD());
-			statement.setFloat(6, pos.getDeM());
-			statement.setFloat(7, pos.getDeS());
-			statement.setFloat(8, pos.getRedShift());
+			statement.setFloat(5, Float.parseFloat(pos.getDeD()));
+			statement.setFloat(6, Float.parseFloat(pos.getDeM()));
+			statement.setFloat(7, Float.parseFloat(pos.getDeS()));
+			statement.setFloat(8, Float.parseFloat(pos.getRedShift()));
 			statement.setString(9, pos.getGalaxy());
 			statement.executeUpdate();
 			
@@ -116,14 +116,14 @@ public class PositionRepository {
 			if (result.next()) {
 				if (position == null) {
 					position = new Position();
-					position.setRaH(result.getFloat("raH"));
-					position.setRaM(result.getFloat("raM"));
-					position.setRaS(result.getFloat("raS"));
+					position.setRaH(String.valueOf(result.getFloat("raH")));
+					position.setRaM(String.valueOf(result.getFloat("raM")));
+					position.setRaS(String.valueOf(result.getFloat("raS")));
 					position.setDeSgn(result.getBoolean("deSgn"));
-					position.setDeD(result.getFloat("deD"));
-					position.setDeM(result.getFloat("deM"));
-					position.setDeS(result.getFloat("deS"));
-					position.setRedShift(result.getFloat("redShift"));
+					position.setDeD(String.valueOf(result.getFloat("deD")));
+					position.setDeM(String.valueOf(result.getFloat("deM")));
+					position.setDeS(String.valueOf(result.getFloat("deS")));
+					position.setRedShift(String.valueOf(result.getFloat("redShift")));
 					position.setGalaxy(result.getString("galaxy"));
 				}
 			} else {

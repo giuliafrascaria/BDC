@@ -3,7 +3,7 @@ package entity;
 public class Brightness {
 	private String ion;
 	private boolean flag; //true if is an upper limit, otherwise false
-	private float val;
+	private String val;
 	private String galaxy;
 	
 	public String getIon() {
@@ -22,11 +22,11 @@ public class Brightness {
 		this.flag = flag;
 	}
 	
-	public float getVal() {
+	public String getVal() {
 		return val;
 	}
 	
-	public void setVal(float val) {
+	public void setVal(String val) {
 		this.val = val;
 	}
 

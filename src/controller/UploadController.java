@@ -166,18 +166,18 @@ public class UploadController {
 					continue;
 				}
 				pos.setGalaxy(name);
-				pos.setRaH(Float.parseFloat(rah));
-				pos.setRaM(Float.parseFloat(ram));
-				pos.setRaS(Float.parseFloat(ras));
+				pos.setRaH(rah);
+				pos.setRaM(ram);
+				pos.setRaS(ras);
 				if (de.equals("+")) {
 					pos.setDeSgn(true);
 				} else {
 					pos.setDeSgn(false);
 				}
-				pos.setDeD(Float.parseFloat(ded));
-				pos.setDeM(Float.parseFloat(dem));
-				pos.setDeS(Float.parseFloat(des));
-				pos.setRedShift(Float.parseFloat(red));
+				pos.setDeD(ded);
+				pos.setDeM(dem);
+				pos.setDeS(des);
+				pos.setRedShift(red);
 				
 				gr.persist(galaxy);
 				
@@ -191,7 +191,7 @@ public class UploadController {
 					} else {
 						br1.setFlag(true);
 					}
-					br1.setVal(Float.parseFloat(lnev));
+					br1.setVal(lnev);
 					br1.setGalaxy(name);
 					br.persist(br1);
 				}
@@ -204,7 +204,7 @@ public class UploadController {
 					} else {
 						br2.setFlag(true);
 					}
-					br2.setVal(Float.parseFloat(lne2));
+					br2.setVal(lne2);
 					br2.setGalaxy(name);
 					br.persist(br2);
 				}
@@ -217,7 +217,7 @@ public class UploadController {
 					} else {
 						br3.setFlag(true);
 					}
-					br3.setVal(Float.parseFloat(lnoiv));
+					br3.setVal(lnoiv);
 					br3.setGalaxy(name);
 					br.persist(br3);
 				}

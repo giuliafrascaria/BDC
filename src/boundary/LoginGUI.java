@@ -104,6 +104,10 @@ public class LoginGUI extends JFrame{
 		
 		centreWindow();
 		this.setVisible(true);
+		/*String[] pr = {"prova"};
+		String[] cr = {"casa"};
+		String[][] a = {pr, cr};
+		new ResultGUI(1, mainPanel, 1, pr, a);*/
 	}
 	
 	public LoginGUI(JPanel mainPanel) {

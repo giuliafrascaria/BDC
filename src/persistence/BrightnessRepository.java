@@ -36,7 +36,7 @@ public class BrightnessRepository {
 			statement = connection.prepareStatement(insert);
 			statement.setString(1, brightness.getIon());
 			statement.setBoolean(2, brightness.isFlag());
-			statement.setFloat(3, brightness.getVal());
+			statement.setFloat(3, Float.parseFloat(brightness.getVal()));
 			statement.setString(4, brightness.getGalaxy());
 			statement.executeUpdate();
 
@@ -62,7 +62,7 @@ public class BrightnessRepository {
 			
 			statement = connection.prepareStatement(update);
 			statement.setBoolean(1, br.isFlag());
-			statement.setFloat(2, br.getVal());
+			statement.setFloat(2, Float.parseFloat(br.getVal()));
 			statement.setString(3, br.getGalaxy());
 			statement.setString(4, br.getIon());
 			statement.executeUpdate();
@@ -105,7 +105,7 @@ public class BrightnessRepository {
 					brightness = new Brightness();
 					brightness.setIon(result.getString("ion"));
 					brightness.setFlag(result.getBoolean("flag"));
-					brightness.setVal(result.getFloat("val"));
+					brightness.setVal(String.valueOf(result.getFloat("val")));
 					brightness.setGalaxy(result.getString("galaxy"));
 				}
 			} else {
