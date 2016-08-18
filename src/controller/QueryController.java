@@ -1,5 +1,7 @@
 package controller;
 
+import java.sql.SQLException;
+
 import entity.Brightness;
 import entity.Galaxy;
 import entity.Position;
@@ -61,4 +63,17 @@ public class QueryController {
 		return result;
 	}
 	
+	
+	public String[][] findRedShift(String redshift) throws ClassNotFoundException, SQLException 
+	{
+		PositionRepository pr = new PositionRepository();
+		Position position = pr.findByRedShift(redshift);
+		
+		String[][] result = {{position.getGalaxy(), position.getRedShift()}};
+		
+		return result;
+	}
+	
 }
+
+

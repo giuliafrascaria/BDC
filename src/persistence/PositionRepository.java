@@ -144,4 +144,55 @@ public class PositionRepository {
 		}
 		return position;
 	}
+
+
+	/**
+	 * Find a position by redshift value
+	 * @param redshift value
+	 * @return returns the found position instance
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
+	 */
+	public Position findByRedShift(String redshift) throws ClassNotFoundException, SQLException  {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		Position position = null;
+		ResultSet result = null;
+		final String query = "select galaxy, redshift from position where redShift<"+redshift;
+		
+		try{		
+			connection = this.dataSource.getConnection();
+			
+			statement = connection.prepareStatement(query);
+			statement.setString(1, redshift);
+			result = statement.executeQuery();
+			
+			if (result.next()) {
+				if (position == null) {
+					position = new Position();
+					
+					position.setRedShift(String.valueOf(result.getFloat("redShift")));
+					position.setGalaxy(result.getString("galaxy"));
+				}
+			} else {
+				return null;
+			}
+		}finally{
+			// release resources
+			if(result != null){
+				result.close();
+			}
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+		return position;
+	}
 }
+
+
+
