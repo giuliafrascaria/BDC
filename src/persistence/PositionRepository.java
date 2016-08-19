@@ -147,7 +147,7 @@ public class PositionRepository {
 		}
 		return position;
 	}
-<<<<<<< HEAD
+
 
 
 	/**
@@ -163,7 +163,7 @@ public class PositionRepository {
 		Position position = null;
 		ResultSet result = null;
 		final String query = "select galaxy, redshift from position where redShift<"+redshift;
-=======
+
 	
 	public List<Position> findAll () throws Exception {
 		Connection connection = null;
@@ -171,13 +171,13 @@ public class PositionRepository {
 		List<Position> positions = new ArrayList<Position>();
 		ResultSet result = null;
 		final String query = "select * from position";
->>>>>>> 1b60451759718e07df2072a4407fba40051f4bfa
+
 		
 		try{		
 			connection = this.dataSource.getConnection();
 			
 			statement = connection.prepareStatement(query);
-<<<<<<< HEAD
+
 			statement.setString(1, redshift);
 			result = statement.executeQuery();
 			
@@ -190,7 +190,7 @@ public class PositionRepository {
 				}
 			} else {
 				return null;
-=======
+
 			result = statement.executeQuery();
 			
 			if (!result.next()) {
@@ -209,7 +209,7 @@ public class PositionRepository {
 				position.setRedShift(String.valueOf(result.getFloat("redShift")));
 				position.setGalaxy(result.getString("galaxy"));
 				positions.add(position);
->>>>>>> 1b60451759718e07df2072a4407fba40051f4bfa
+
 			}
 		}finally{
 			// release resources
@@ -224,11 +224,10 @@ public class PositionRepository {
 				connection.close();
 			}
 		}
-<<<<<<< HEAD
-		return position;
-=======
+
+
 		return positions;
->>>>>>> 1b60451759718e07df2072a4407fba40051f4bfa
+
 	}
 }
 

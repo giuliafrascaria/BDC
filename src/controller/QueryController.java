@@ -1,12 +1,11 @@
 package controller;
 
-<<<<<<< HEAD
+
 import java.sql.SQLException;
-=======
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
->>>>>>> 1b60451759718e07df2072a4407fba40051f4bfa
 
 import entity.Brightness;
 import entity.Galaxy;
@@ -69,7 +68,7 @@ public class QueryController {
 		return result;
 	}
 	
-<<<<<<< HEAD
+
 	
 	public String[][] findRedShift(String redshift) throws ClassNotFoundException, SQLException 
 	{
@@ -81,7 +80,7 @@ public class QueryController {
 		return result;
 	}
 	
-=======
+
 	public String[][] galaxyInACircle(String[] inputs) throws Exception {
 		int max = Integer.parseInt(inputs[0]);
 		double range = Double.parseDouble(inputs[1]);
@@ -127,7 +126,7 @@ public class QueryController {
 		String[][] result = {gal, dist};
 		return result;
 	}
->>>>>>> 1b60451759718e07df2072a4407fba40051f4bfa
+
 }
 
 
