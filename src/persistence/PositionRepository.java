@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import entity.Position;
+import exceptions.PositionTableEmptyException;
 
 public class PositionRepository {	
 	private DataSource dataSource;
@@ -143,5 +146,51 @@ public class PositionRepository {
 			}
 		}
 		return position;
+	}
+	
+	public List<Position> findAll () throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		List<Position> positions = new ArrayList<Position>();
+		ResultSet result = null;
+		final String query = "select * from position";
+		
+		try{		
+			connection = this.dataSource.getConnection();
+			
+			statement = connection.prepareStatement(query);
+			result = statement.executeQuery();
+			
+			if (!result.next()) {
+				throw new PositionTableEmptyException();
+			}
+			while (result.next()) {
+				Position position = new Position();
+				position = new Position();
+				position.setRaH(String.valueOf(result.getFloat("raH")));
+				position.setRaM(String.valueOf(result.getFloat("raM")));
+				position.setRaS(String.valueOf(result.getFloat("raS")));
+				position.setDeSgn(result.getBoolean("deSgn"));
+				position.setDeD(String.valueOf(result.getFloat("deD")));
+				position.setDeM(String.valueOf(result.getFloat("deM")));
+				position.setDeS(String.valueOf(result.getFloat("deS")));
+				position.setRedShift(String.valueOf(result.getFloat("redShift")));
+				position.setGalaxy(result.getString("galaxy"));
+				positions.add(position);
+			}
+		}finally{
+			// release resources
+			if(result != null){
+				result.close();
+			}
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+		return positions;
 	}
 }
