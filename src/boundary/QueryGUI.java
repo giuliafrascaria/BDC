@@ -13,11 +13,13 @@ import javax.swing.JTextField;
 
 import controller.QueryController;
 import exceptions.GalaxyNotExistsException;
+import exceptions.PositionTableEmptyException;
 
 public class QueryGUI {
 
 	private int accountType;
 	public JPanel mainPanel;
+	private int queryType;
 	
 	private JTextField txtInput1;
 	private JTextField txtInput2;
@@ -41,6 +43,7 @@ public class QueryGUI {
 		setMainPanel(mainPanel);
 		mainPanel.removeAll();
 		this.accountType = accountType;
+		this.queryType = queryType;
 		
 		Box horizontalBox = Box.createHorizontalBox();
 		horizontalBox.setBounds(195, 20, 363, 32);
@@ -97,6 +100,10 @@ public class QueryGUI {
 					txtInput2.setBounds(430, 285, 247, 19);
 					mainPanel.add(txtInput2);
 			
+					JLabel lblCenter = new JLabel("COORDINATE DEL CENTRO (ascenzione e declinazione)");
+					lblCenter.setBounds(106, 332, 400, 15);
+					mainPanel.add(lblCenter);
+					
 					lblInput3 = new JLabel("Ascensione retta (ore_minuti_secondi):");
 					lblInput3.setBounds(106, 360, 289, 15);
 					mainPanel.add(lblInput3);
@@ -151,14 +158,30 @@ public class QueryGUI {
 	private class QueryAL implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			QueryController cntr = QueryController.getInstance();
-			try {
-				String[] input = {txtInput1.getText()};
-				String[][] result =cntr.findGalaxy(txtInput1.getText());
-				new ResultGUI(accountType, mainPanel, 1, input, result);
-			} catch (GalaxyNotExistsException e) {
-				JOptionPane.showMessageDialog(null, "La galassia '" + e.getName() + "' non esiste. \nRicorda di fare attenzione alle maiuscole e minuscole." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
-			} catch (Exception e) {
-				e.printStackTrace();
+			switch (queryType) {
+			case 1:
+				try {
+					String[] inputs = {txtInput1.getText()};
+					String[][] result = cntr.findGalaxy(txtInput1.getText());
+					new ResultGUI(accountType, mainPanel, 1, inputs, result);
+				} catch (GalaxyNotExistsException e) {
+					JOptionPane.showMessageDialog(null, "La galassia '" + e.getName() + "' non esiste. \nRicorda di fare attenzione alle maiuscole e minuscole." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case 2:
+				String[] inputs = {txtInput1.getText(), txtInput2.getText(), txtInput3.getText(), txtInput4.getText()};
+				try {
+					String[][] result = cntr.galaxyInACircle(inputs);
+					new ResultGUI(accountType, mainPanel, 2, inputs, result);
+				} catch (PositionTableEmptyException e){
+					JOptionPane.showMessageDialog(null, "Non ci sono posizioni salvate nel DB. Aggiungere galassie e poi riprovare." , "Errore", JOptionPane.ERROR_MESSAGE);
+				} catch (Exception e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
 			}
 		}
 	}
