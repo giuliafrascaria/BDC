@@ -23,7 +23,6 @@ public class QuerySelectorGUI {
 	private ByPhysicalAL ByPhysicalActionListener;
 	private ByRowAL ByRowActionListener;
 	private ByRatioAL ByRatioActionListener;
-	private ByRowContRatioAL ByRowContRatioActionListener;
 	private ByGroupAL ByGroupActionListener;
 	private ByGropuApAL ByGropuApActionListener;
 	
@@ -81,19 +80,15 @@ public class QuerySelectorGUI {
 		mainPanel.add(btnByRow);
 		
 		JButton btnByRatio = new JButton("<html>5) Cerca valori dei <br> rapporti delle righe <br> spettrali<html>");
-		btnByRatio.setBounds(138, 400, 220, 40);
+		btnByRatio.setBounds(138, 400, 220, 76);
 		mainPanel.add(btnByRatio);
-				
-		JButton btnByRowContRatio = new JButton("<html>6) Cerca rapporto tra <br> flusso riga e continuo<html>");
-		btnByRowContRatio.setBounds(435, 400, 220, 40);
-		mainPanel.add(btnByRowContRatio);
 		
-		JButton btnByGroup = new JButton("<html>7) Cerca valori dei <br> rapporti delle righe <br> per gruppo spettrale<html>");
+		JButton btnByGroup = new JButton("<html>6) Statistiche valori dei <br> rapporti delle righe <br> per gruppo spettrale<html>");
 		btnByGroup.setBounds(138, 500, 220, 76);
 		mainPanel.add(btnByGroup);
 			
-		JButton btnByGropuAp = new JButton("<html>8) Cerca valori dei  <br> rapporti delle righe  <br> per gruppo spettrale  <br> per un apertura<html>");
-		btnByGropuAp.setBounds(435, 500, 220, 76);
+		JButton btnByGropuAp = new JButton("<html>7) Cerca rapporto tra <br> flusso riga e continuo<html>");
+		btnByGropuAp.setBounds(435, 425, 220, 76);
 		mainPanel.add(btnByGropuAp);	
 		
 		HomeActionListener = new HomeAL();
@@ -103,7 +98,6 @@ public class QuerySelectorGUI {
 		ByPhysicalActionListener = new ByPhysicalAL();
 		ByRowActionListener = new ByRowAL();
 		ByRatioActionListener = new ByRatioAL();
-		ByRowContRatioActionListener = new ByRowContRatioAL();
 		ByGroupActionListener = new ByGroupAL();
 		ByGropuApActionListener = new ByGropuApAL();
 		
@@ -114,7 +108,6 @@ public class QuerySelectorGUI {
 		btnByPhysical.addActionListener(ByPhysicalActionListener);
 		btnByRow.addActionListener(ByRowActionListener);
 		btnByRatio.addActionListener(ByRatioActionListener);
-		btnByRowContRatio.addActionListener(ByRowContRatioActionListener);
 		btnByGroup.addActionListener(ByGroupActionListener);
 		btnByGropuAp.addActionListener(ByGropuApActionListener);
 		
@@ -163,21 +156,15 @@ public class QuerySelectorGUI {
 		}
 	}
 	
-	private class ByRowContRatioAL implements ActionListener {
+	private class ByGroupAL implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			new QueryGUI(accountType, mainPanel, 6);
 		}
 	}
 	
-	private class ByGroupAL implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			new QueryGUI(accountType, mainPanel, 7);
-		}
-	}
-	
 	private class ByGropuApAL implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			new QueryGUI(accountType, mainPanel, 8);
+			new QueryGUI(accountType, mainPanel, 7);
 		}
 	}
 }

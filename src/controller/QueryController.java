@@ -46,9 +46,9 @@ public class QueryController {
 		PositionRepository pr = new PositionRepository();
 		Position position = pr.findByPrimaryKey(name);
 		BrightnessRepository br = new BrightnessRepository();
-		Brightness brightness1 = br.findByPrimaryKey(name, "NeV14.3");
-		Brightness brightness2 = br.findByPrimaryKey(name, "NeV24.3");
-		Brightness brightness3 = br.findByPrimaryKey(name, "OIV25.9");
+		Brightness brightness1 = br.findByPrimaryKey(name, "nev14.3");
+		Brightness brightness2 = br.findByPrimaryKey(name, "nev24.3");
+		Brightness brightness3 = br.findByPrimaryKey(name, "oiv25.9");
 		String sgn, fl1="", fl2="", fl3="";
 		if (position.getDeSgn()) {
 			sgn = "+";

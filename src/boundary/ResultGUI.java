@@ -97,9 +97,7 @@ public class ResultGUI {
 				break;
 		case 6: lblSubTitle.setText("Ricerca dei rapporto flusso riga e continuo: ");
 				break;
-		case 7: lblSubTitle.setText("Ricerca dei rapporti delle righe per gruppo spettrale: ");
-				break;
-		case 8: lblSubTitle.setText("Ricerca rapporto flusso riga (apertura " +  inputs[2] + ") e continuo: " + inputs[1]);
+		case 7: lblSubTitle.setText("Ricerca rapporto flusso riga (apertura " +  inputs[2] + ") e continuo: " + inputs[1]);
 				lblSubTitle2.setText("Per la galassia:" + inputs[0]);
 				txtResult.setText("Valore del rapporto(continuo al denominatore)____informazioni sul valore.\n\n");
 				txtResult.setText(txtResult.getText() + outputs[0][0] + "____" + outputs[0][1] +"\n");
