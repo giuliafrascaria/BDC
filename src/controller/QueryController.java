@@ -1,8 +1,5 @@
 package controller;
 
-
-import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,7 +67,7 @@ public class QueryController {
 	
 
 	
-	public String[][] findRedShift(String redshift) throws ClassNotFoundException, SQLException 
+	public String[][] findRedShift(String redshift) throws Exception 
 	{
 		PositionRepository pr = new PositionRepository();
 		Position position = pr.findByRedShift(redshift);
