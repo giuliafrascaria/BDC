@@ -108,7 +108,6 @@ public class QueryController {
 			}
 			double de1 = sgnDE1*((Double.parseDouble(pos.getDeD())) + (Double.parseDouble(pos.getDeM())/60) + (Double.parseDouble(pos.getDeS())/3600));
 			double res = Math.acos(Math.sin(cRA)*Math.sin(ra1) + Math.cos(cRA)*Math.cos(ra1)*Math.cos(cDE - de1));
-			System.out.println(res);
 			if (res < range) {
 				distances.add(res);
 				inCircle.add(pos);
