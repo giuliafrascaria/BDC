@@ -124,7 +124,33 @@ public class QueryGUI {
 					mainPanel.add(txtInput4);
 					break;
 			case 3: lblSubTitle.setText("Ricerca per caratteristiche fisiche");
+					
+					lblInput1 = new JLabel("Valore del redshift");
+					lblInput1.setBounds(106, 210, 306, 15);
+					mainPanel.add(lblInput1);
+			
+					txtInput1 = new JTextField();
+					txtInput1.setBounds(430, 210, 247, 19);
+					mainPanel.add(txtInput1);
+			
+					lblInput2 = new JLabel("Visualizzare risultati con redshift > < =");
+					lblInput2.setBounds(106, 285, 306, 15);
+					mainPanel.add(lblInput2);
+			
+					txtInput2 = new JTextField();
+					txtInput2.setBounds(430, 285, 247, 19);
+					mainPanel.add(txtInput2);
+					
+					lblInput3 = new JLabel("Numero massimo di galassie da restituire:");
+					lblInput3.setBounds(106, 360, 306, 15);
+					mainPanel.add(lblInput3);
+					
+					txtInput3 = new JTextField();
+					txtInput3.setBounds(430, 360, 247, 19);
+					mainPanel.add(txtInput3);
+					
 					break;
+					
 			case 4: lblSubTitle.setText("Ricerca linee spettrali");
 					break;
 			case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali");
