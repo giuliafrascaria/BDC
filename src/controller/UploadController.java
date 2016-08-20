@@ -185,7 +185,7 @@ public class UploadController {
 				
 				if (!lnev.equals("")) {
 					Brightness br1 = new Brightness();
-					br1.setIon("NeV14.3");
+					br1.setIon("nev14.3");
 					if (l_lnev1.equals("")) {
 						br1.setFlag(false);
 					} else {
@@ -198,7 +198,7 @@ public class UploadController {
 				
 				if (!lne2.equals("")) {
 					Brightness br2 = new Brightness();
-					br2.setIon("NeV24.3");
+					br2.setIon("nev24.3");
 					if (l_lnev2.equals("")) {
 						br2.setFlag(false);
 					} else {
@@ -211,7 +211,7 @@ public class UploadController {
 				
 				if (!lnoiv.equals("")) {
 					Brightness br3 = new Brightness();
-					br3.setIon("OIV25.9");
+					br3.setIon("oiv25.9");
 					if (l_loiv.equals("")) {
 						br3.setFlag(false);
 					} else {
@@ -294,7 +294,7 @@ public class UploadController {
 				e_Fsii34 = strArray[27].trim().toLowerCase();
 				Mod = strArray[28].trim().toLowerCase();
 				
-				String[] ionArray = {"fsiv10", "fneii12", "fnev14", "fneiii15", "fsiii18", "fnev24", "foiv25", "fsiii33", "fsii34"};
+				String[] ionArray = {"siv10", "neii12", "nev14", "neiii15", "siii18", "nev24", "oiv25", "siii33", "sii34"};
 				String[] flagArray = {l_Fsiv10, l_Fneii12, l_Fnev14, l_Fneiii15, l_Fsiii18, l_Fnev24, l_Foiv25, l_Fsiii33, l_Fsii34};
 				String[] valArray = {Fsiv10, Fneii12, Fnev14, Fneiii15, Fsiii18, Fnev24, Foiv25, Fsiii33, Fsii34};
 				String[] errArray = {e_Fsiv10, e_Fneii12, e_Fnev14, e_Fneiii15, e_Fsiii18, e_Fnev24, e_Foiv25, e_Fsiii33, e_Fsii34};
@@ -384,7 +384,7 @@ public class UploadController {
 				e_Ccii158 = strArray[19].trim().toLowerCase();
 				Aper = strArray[21].trim().toLowerCase();
 				
-				String[] ionArray = {"coiii52", "cniii57", "coi63", "coiii88", "cnii122", "coi145", "ccii158"};
+				String[] ionArray = {"oiii52", "niii57", "oi63", "oiii88", "nii122", "oi145", "cii158"};
 				String[] flagArray = {"", "", l_Coi63, l_Coiii88, l_Cnii122, l_Coi145, l_Ccii158};
 				String[] valArray = {Coiii52, Cniii57, Coi63, Coiii88, Cnii122, Coi145, Ccii158};
 				String[] errArray = {e_Coiii52, e_Cniii57, e_Coi63, e_Coiii88, e_Cnii122, e_Coi145, e_Ccii158};
@@ -471,7 +471,7 @@ public class UploadController {
 				e_Fcii158 = strArray[21].trim().toLowerCase();
 				Aper = strArray[22].trim().toLowerCase();
 				
-				String[] ionArray = {"foiii52", "fniii57", "foi63", "foiii88", "fnii122", "foi145", "fcii158"};
+				String[] ionArray = {"oiii52", "niii57", "oi63", "oiii88", "nii122", "oi145", "cii158"};
 				String[] flagArray = {l_Foiii52, l_Fniii57, l_Foi63, l_Foiii88, l_Fnii122, l_Foi145, l_Fcii158};
 				String[] valArray = {Foiii52, Fniii57, Foi63, Foiii88, Fnii122, Foi145, Fcii158};
 				String[] errArray = {e_Foiii52, e_Fniii57, e_Foi63, e_Foiii88, e_Fnii122, e_Foi145, e_Fcii158};

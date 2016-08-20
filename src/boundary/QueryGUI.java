@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controller.QueryController;
+import exceptions.FluxNotExistsException;
 import exceptions.GalaxyNotExistsException;
 import exceptions.PositionTableEmptyException;
 
@@ -75,6 +76,7 @@ public class QueryGUI {
 		
 		switch (queryType) {
 			case 1: lblSubTitle.setText("Ricerca per nome");
+			
 					lblInput1 = new JLabel("nome della galassia (Key Sensitive):");
 					lblInput1.setBounds(106, 210, 306, 15);
 					mainPanel.add(lblInput1);
@@ -84,6 +86,7 @@ public class QueryGUI {
 					mainPanel.add(txtInput1);
 					break;
 			case 2: lblSubTitle.setText("Ricerca entro un raggio");
+			
 					lblInput1 = new JLabel("Numero massimo di galassie da restituire:");
 					lblInput1.setBounds(106, 210, 306, 15);
 					mainPanel.add(lblInput1);
@@ -125,6 +128,30 @@ public class QueryGUI {
 			case 4: lblSubTitle.setText("Ricerca linee spettrali");
 					break;
 			case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali");
+			
+					lblInput1 = new JLabel("Nome della galassia:");
+					lblInput1.setBounds(106, 210, 306, 15);
+					mainPanel.add(lblInput1);
+	
+					txtInput1 = new JTextField();
+					txtInput1.setBounds(430, 210, 247, 19);
+					mainPanel.add(txtInput1);
+	
+					lblInput2 = new JLabel("Flusso al numeratore:");
+					lblInput2.setBounds(106, 285, 228, 15);
+					mainPanel.add(lblInput2);
+	
+					txtInput2 = new JTextField();
+					txtInput2.setBounds(430, 285, 247, 19);
+					mainPanel.add(txtInput2);
+			
+					lblInput3 = new JLabel("Flusso al denominatore:");
+					lblInput3.setBounds(106, 360, 289, 15);
+					mainPanel.add(lblInput3);
+	
+					txtInput3 = new JTextField();
+					txtInput3.setBounds(430, 360, 247, 19);
+					mainPanel.add(txtInput3);
 					break;
 			case 6: lblSubTitle.setText("Ricerca dei rapporto flusso riga e continuo");
 					break;
@@ -165,23 +192,37 @@ public class QueryGUI {
 					String[][] result = cntr.findGalaxy(inputs[0]);
 					new ResultGUI(accountType, mainPanel, 1, inputs, result);
 				} catch (GalaxyNotExistsException e) {
-					JOptionPane.showMessageDialog(null, "La galassia '" + e.getName() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 			case 2:
-				String[] inputs = {txtInput1.getText(), txtInput2.getText(), txtInput3.getText(), txtInput4.getText()};
 				try {
+					String[] inputs = {txtInput1.getText(), txtInput2.getText(), txtInput3.getText(), txtInput4.getText()};
 					String[][] result = cntr.galaxyInACircle(inputs);
 					new ResultGUI(accountType, mainPanel, 2, inputs, result);
 				} catch (PositionTableEmptyException e){
 					JOptionPane.showMessageDialog(null, "Non ci sono posizioni salvate nel DB. Aggiungere galassie e poi riprovare." , "Errore", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e) {
-					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
+			case 5:
+				try {
+					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase()};
+					String[][] result = cntr.fluxRatio(inputs[0], inputs[1], inputs[2]);
+					new ResultGUI(accountType, mainPanel, 5, inputs, result);
+				}catch (GalaxyNotExistsException e) {
+					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
+				}catch (FluxNotExistsException e) {
+					switch (e.getType()) {
+					case 1: JOptionPane.showMessageDialog(null, "Il flusso " + txtInput2.getText().toLowerCase() +  " non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 2:	JOptionPane.showMessageDialog(null, "Il flusso " + txtInput3.getText().toLowerCase() +  " non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					}					
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 	}

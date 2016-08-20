@@ -87,7 +87,10 @@ public class ResultGUI {
 				break;
 		case 4: lblSubTitle.setText("Ricerca linee spettrali: ");
 				break;
-		case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali: ");
+		case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali della galassia: " + inputs[0]);
+				lblSubTitle2.setText("Flusso numeratore: " + inputs[1] + " Flusso denominatore: " + inputs[2]);
+				txtResult.setText("Valore del rapporto____informazioni sul valore.\n\n");
+				txtResult.setText(txtResult.getText() + outputs[0][0] + "____" + outputs[0][1] +"\n");
 				break;
 		case 6: lblSubTitle.setText("Ricerca dei rapporto flusso riga e continuo: ");
 				break;

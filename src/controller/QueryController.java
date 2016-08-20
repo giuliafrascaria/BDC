@@ -7,10 +7,13 @@ import java.util.List;
 import entity.Brightness;
 import entity.Galaxy;
 import entity.Position;
+import entity.SpitzerRow;
+import exceptions.FluxNotExistsException;
 import exceptions.GalaxyNotExistsException;
 import persistence.BrightnessRepository;
 import persistence.GalaxyRepository;
 import persistence.PositionRepository;
+import persistence.SpitzerRowRepository;
 
 public class QueryController {
 	private static QueryController instance = null;
@@ -120,6 +123,37 @@ public class QueryController {
 			dist[i] = String.valueOf(sorted.get(i));
 		}
 		String[][] result = {gal, dist};
+		return result;
+	}
+
+	public String[][] fluxRatio(String galaxy, String fluxNum, String fluxDen) throws Exception{
+		GalaxyRepository gr = new GalaxyRepository();
+		if (gr.findByPrimaryKey(galaxy) == null) {
+			throw new GalaxyNotExistsException(galaxy);
+		}
+		SpitzerRowRepository spr = new SpitzerRowRepository();
+		SpitzerRow num = null;
+		SpitzerRow den = null;
+		num = spr.findByPrimaryKey(galaxy, fluxNum);
+		if (num == null) {
+			throw new FluxNotExistsException(galaxy, 1);
+		}
+		den = spr.findByPrimaryKey(galaxy, fluxDen);
+		if (den == null) {
+			throw new FluxNotExistsException(galaxy, 2);
+		}
+		float ratio = Float.parseFloat(num.getVal())/Float.parseFloat(den.getVal());
+		String limit = null;
+		if (num.isFlag() && !den.isFlag()) {
+			limit = "upper limit";
+		}else if (!num.isFlag() && den.isFlag()) {
+			limit = "lower limit";
+		} else if (num.isFlag() && den.isFlag()) {
+			limit = "sia numeratore che denominatore sono upper limit";
+		} else if (!num.isFlag() && !den.isFlag()) {
+			limit = "valore esatto";
+		}
+		String[][] result = {{String.valueOf(ratio), limit}};
 		return result;
 	}
 

@@ -19,7 +19,13 @@ public class QuerySelectorGUI {
 	private ByNameAL ByNameActionListener;
 	private ByDistanceAL ByDistanceActionListener;
 	private LogoutAL LogoutActionListener;
-	private HomeAL HomeActionListener;
+	private HomeAL HomeActionListener;	
+	private ByPhysicalAL ByPhysicalActionListener;
+	private ByRowAL ByRowActionListener;
+	private ByRatioAL ByRatioActionListener;
+	private ByRowContRatioAL ByRowContRatioActionListener;
+	private ByGroupAL ByGroupActionListener;
+	private ByGropuApAL ByGropuApActionListener;
 	
 	private void setMainPanel(JPanel mainPanel) {
 		this.mainPanel = mainPanel;
@@ -94,11 +100,23 @@ public class QuerySelectorGUI {
 		LogoutActionListener = new LogoutAL();
 		ByNameActionListener = new ByNameAL();
 		ByDistanceActionListener = new ByDistanceAL();
+		ByPhysicalActionListener = new ByPhysicalAL();
+		ByRowActionListener = new ByRowAL();
+		ByRatioActionListener = new ByRatioAL();
+		ByRowContRatioActionListener = new ByRowContRatioAL();
+		ByGroupActionListener = new ByGroupAL();
+		ByGropuApActionListener = new ByGropuApAL();
 		
 		btnByDistance.addActionListener(ByDistanceActionListener);
 		btnByName.addActionListener(ByNameActionListener);
 		btnLogout.addActionListener(LogoutActionListener);
 		btnHome.addActionListener(HomeActionListener);
+		btnByPhysical.addActionListener(ByPhysicalActionListener);
+		btnByRow.addActionListener(ByRowActionListener);
+		btnByRatio.addActionListener(ByRatioActionListener);
+		btnByRowContRatio.addActionListener(ByRowContRatioActionListener);
+		btnByGroup.addActionListener(ByGroupActionListener);
+		btnByGropuAp.addActionListener(ByGropuApActionListener);
 		
 		mainPanel.updateUI();
 	}
@@ -124,6 +142,42 @@ public class QuerySelectorGUI {
 	private class ByDistanceAL implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			new QueryGUI(accountType, mainPanel, 2);
+		}
+	}
+	
+	private class ByPhysicalAL implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			new QueryGUI(accountType, mainPanel, 3);
+		}
+	}
+	
+	private class ByRowAL implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			new QueryGUI(accountType, mainPanel, 4);
+		}
+	}
+	
+	private class ByRatioAL implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			new QueryGUI(accountType, mainPanel, 5);
+		}
+	}
+	
+	private class ByRowContRatioAL implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			new QueryGUI(accountType, mainPanel, 6);
+		}
+	}
+	
+	private class ByGroupAL implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			new QueryGUI(accountType, mainPanel, 7);
+		}
+	}
+	
+	private class ByGropuApAL implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			new QueryGUI(accountType, mainPanel, 8);
 		}
 	}
 }
