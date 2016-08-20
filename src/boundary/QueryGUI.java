@@ -161,11 +161,11 @@ public class QueryGUI {
 			switch (queryType) {
 			case 1:
 				try {
-					String[] inputs = {txtInput1.getText()};
-					String[][] result = cntr.findGalaxy(txtInput1.getText());
+					String[] inputs = {txtInput1.getText().toLowerCase()};
+					String[][] result = cntr.findGalaxy(inputs[0]);
 					new ResultGUI(accountType, mainPanel, 1, inputs, result);
 				} catch (GalaxyNotExistsException e) {
-					JOptionPane.showMessageDialog(null, "La galassia '" + e.getName() + "' non esiste. \nRicorda di fare attenzione alle maiuscole e minuscole." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "La galassia '" + e.getName() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
