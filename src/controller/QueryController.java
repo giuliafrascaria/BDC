@@ -6,12 +6,16 @@ import java.util.List;
 
 import entity.Brightness;
 import entity.Galaxy;
+import entity.PacsContinuousRow;
+import entity.PacsRow;
 import entity.Position;
 import entity.SpitzerRow;
 import exceptions.FluxNotExistsException;
 import exceptions.GalaxyNotExistsException;
 import persistence.BrightnessRepository;
 import persistence.GalaxyRepository;
+import persistence.PacsContRepository;
+import persistence.PacsRowRepository;
 import persistence.PositionRepository;
 import persistence.SpitzerRowRepository;
 
@@ -151,6 +155,41 @@ public class QueryController {
 		} else if (num.isFlag() && den.isFlag()) {
 			limit = "sia numeratore che denominatore sono upper limit";
 		} else if (!num.isFlag() && !den.isFlag()) {
+			limit = "valore esatto";
+		}
+		String[][] result = {{String.valueOf(ratio), limit}};
+		return result;
+	}
+	
+	public String[][] fluxContRowRatio (String galaxy, String ion, String aperture) throws Exception {
+		GalaxyRepository gr = new GalaxyRepository();
+		if (gr.findByPrimaryKey(galaxy) == null) {
+			throw new GalaxyNotExistsException(galaxy);
+		}
+		PacsRowRepository prr = new PacsRowRepository();
+		PacsContRepository pcr = new PacsContRepository();
+		PacsContinuousRow cont = null;
+		PacsRow row = null;
+		cont = pcr.findByPrimaryKey(galaxy, ion);
+		if (cont == null) {
+			throw new FluxNotExistsException(galaxy, 2);
+		}
+		if (aperture == null) {
+			aperture = cont.getAperture();
+		}
+		row = prr.findByPrimaryKey(galaxy, ion, aperture);
+		if (row == null) {
+			throw new FluxNotExistsException(galaxy, 1);
+		}
+		float ratio = Float.parseFloat(row.getVal())/Float.parseFloat(cont.getVal());
+		String limit = null;
+		if (row.isFlag() && !cont.isFlag()) {
+			limit = "upper limit";
+		}else if (!row.isFlag() && cont.isFlag()) {
+			limit = "lower limit";
+		} else if (row.isFlag() && cont.isFlag()) {
+			limit = "sia numeratore che denominatore sono upper limit";
+		} else if (!row.isFlag() && !cont.isFlag()) {
 			limit = "valore esatto";
 		}
 		String[][] result = {{String.valueOf(ratio), limit}};
