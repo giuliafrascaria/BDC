@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import entity.SpitzerRow;
 import exceptions.GalaxyNotExistsException;
@@ -183,5 +185,77 @@ public class SpitzerRowRepository {
 				connection.close();
 			}
 		}
+	}
+	
+	/**
+	 * say if a ion is a Spitzer ion
+	 * @param ion to find
+	 * @return returns a boolean
+	 * @throws SQLException Throws SQLException if closing functions fail
+	 */
+	public boolean findIon(String ion) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		final String query = "select * from flux_spitzer where ion=?";
+		
+		try{		
+			connection = this.dataSource.getConnection();
+			
+			statement = connection.prepareStatement(query);
+			statement.setString(1, ion);
+			result = statement.executeQuery();
+			
+			if (result.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		}finally{
+			// release resources
+			if(result != null){
+				result.close();
+			}
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+	}
+	
+	public List<Double> findAllRowOfClass(String ion, String spClass) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		List<Double> values = new ArrayList<Double>();
+		ResultSet result = null;
+		final String query = "select val from flux_spitzer join galaxy on galaxy=name  where spectralClass=? and ion=?";
+			
+		try{		
+			connection = this.dataSource.getConnection();	
+			statement = connection.prepareStatement(query);
+			statement.setString(1, spClass);
+			statement.setString(2, ion);
+			result = statement.executeQuery();
+
+			while (result.next()) {
+				values.add((double) result.getFloat("val"));
+			}
+		}finally{
+			// release resources
+			if(result != null){
+				result.close();
+			}
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+		return values;
 	}
 }

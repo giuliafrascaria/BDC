@@ -73,14 +73,14 @@ public class ResultGUI {
 				txtResult.setText("asc(ore_min_sec)_decl(segno_gradi_min_sec)_distanza_redshift_limit_NeV14.3_limit_NeV24.3_limit_OIV25.9"
 						+ "_met_errMet \n NOTE: '/' significa valore ingoto. \n\n");
 				for (int i=1; i<outputs[0].length; i++) {
-					txtResult.setText(txtResult.getText() + "__" +outputs[0][i]);
+					txtResult.setText(txtResult.getText() + "___" +outputs[0][i]);
 				}
 				break;
 		case 2: lblSubTitle.setText("Ricerca entro raggio: " + inputs[1] + ", massimo " + inputs[0] + " risultati.");
 				lblSubTitle2.setText("Centro in asc:" + inputs[2] + " e decl:" + inputs[3]);
-				txtResult.setText("Nome galassia____distanza dal centro.\n\n");
+				txtResult.setText("Nome galassia\tdistanza dal centro.\n\n");
 				for (int i=0; i<outputs[0].length; i++) {
-					txtResult.setText(txtResult.getText() + outputs[0][i] + "____" + outputs[1][i] +"\n");
+					txtResult.setText(txtResult.getText() + outputs[0][i] + "\t" + outputs[1][i] +"\n");
 				}
 				break;
 		case 3: lblSubTitle.setText("Ricerca per caratteristiche fisiche: prime " + inputs[2]+ " galassie con valore di redshift " + inputs[1] + " " + inputs[0]);
@@ -92,15 +92,15 @@ public class ResultGUI {
 				break;
 		case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali della galassia: " + inputs[0]);
 				lblSubTitle2.setText("Flusso numeratore: " + inputs[1] + " Flusso denominatore: " + inputs[2]);
-				txtResult.setText("Valore del rapporto____informazioni sul valore.\n\n");
-				txtResult.setText(txtResult.getText() + outputs[0][0] + "____" + outputs[0][1] +"\n");
+				txtResult.setText("Valore del rapporto\tinformazioni sul valore.\n\n");
+				txtResult.setText(txtResult.getText() + outputs[0][0] + "\t" + outputs[0][1] +"\n");
 				break;
 		case 6: lblSubTitle.setText("Ricerca dei rapporto flusso riga e continuo: ");
 				break;
 		case 7: lblSubTitle.setText("Ricerca rapporto flusso riga (apertura " +  inputs[2] + ") e continuo: " + inputs[1]);
 				lblSubTitle2.setText("Per la galassia:" + inputs[0]);
-				txtResult.setText("Valore del rapporto(continuo al denominatore)____informazioni sul valore.\n\n");
-				txtResult.setText(txtResult.getText() + outputs[0][0] + "____" + outputs[0][1] +"\n");
+				txtResult.setText("Valore del rapporto(continuo al denominatore)\tinformazioni sul valore.\n\n");
+				txtResult.setText(txtResult.getText() + outputs[0][0] + "\t" + outputs[0][1] +"\n");
 				break;
 	}
 		

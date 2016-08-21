@@ -10,6 +10,7 @@ import entity.PacsContinuousRow;
 import entity.PacsRow;
 import entity.Position;
 import entity.SpitzerRow;
+import exceptions.ClassNotExistsException;
 import exceptions.FluxNotExistsException;
 import exceptions.GalaxyNotExistsException;
 import persistence.BrightnessRepository;
@@ -55,13 +56,25 @@ public class QueryController {
 		}else {
 			sgn = "-";
 		}
-		if (brightness1.isFlag()) {
+		if (brightness1 == null) {
+			brightness1 = new Brightness();
+			fl1 = "/";
+			brightness1.setVal("/");
+		} else if (brightness1.isFlag()) {
 			fl1 = "<";
 		}
-		if (brightness2.isFlag()) {
+		if (brightness2 == null) {
+			brightness2 = new Brightness();
+			fl2 = "/";
+			brightness2.setVal("/");
+		} else if (brightness2.isFlag()) {
 			fl2 = "<";
 		}
-		if (brightness3.isFlag()) {
+		if (brightness3 == null) {
+			brightness3 = new Brightness();
+			fl3 = "/";
+			brightness3.setVal("/");
+		} else if (brightness3.isFlag()) {
 			fl3 = "<";
 		}
 		String[][] result ={ {galaxy.getName(), 
@@ -194,6 +207,45 @@ public class QueryController {
 		}
 		String[][] result = {{String.valueOf(ratio), limit}};
 		return result;
+	}
+
+	public String[][] fluxStats(String spetClass, String flux1, String flux2, String aper, int operType) throws Exception {
+		GalaxyRepository gr = new GalaxyRepository();
+		if (!gr.existSpectralClass(spetClass)) {
+			throw new ClassNotExistsException();
+		}
+		PacsRowRepository prr = new PacsRowRepository();
+		SpitzerRowRepository spr = new SpitzerRowRepository();
+		List<Double> num = new ArrayList<Double>();
+		List<Double> den = new ArrayList<Double>();
+		if(spr.findIon(flux1)) {
+			num = spr.findAllRowOfClass(flux1, spetClass);
+			if (num.isEmpty()) {
+				throw new FluxNotExistsException(3);
+			}
+		} else if (prr.findIon(flux1)) {
+			num = prr.findAllRowOfClass(flux1, spetClass, aper);
+			if (num.isEmpty()) {
+				throw new FluxNotExistsException(3);
+			}
+		} else {
+			throw new FluxNotExistsException(1);
+		}
+		if(spr.findIon(flux2)) {
+			den = spr.findAllRowOfClass(flux2, spetClass);
+			if (den.isEmpty()) {
+				throw new FluxNotExistsException(4);
+			}
+		} else if (prr.findIon(flux2)) {
+			den = prr.findAllRowOfClass(flux2, spetClass, aper);
+			if (den.isEmpty()) {
+				throw new FluxNotExistsException(4);
+			}
+		} else {
+			throw new FluxNotExistsException(2);
+		}
+		//bisogna calcolare la media e cazzi vari per le due liste
+		return null;
 	}
 
 }

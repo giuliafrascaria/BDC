@@ -16,6 +16,11 @@ public class FluxNotExistsException extends Exception{
 		super("The flux doesn't exists.");
 	}
 
+	public FluxNotExistsException(int type) {
+		super("The input flux doesn't exists in the db");
+		this.type = type;
+	}
+	
 	public FluxNotExistsException(String galaxy, int type) {
 		super("The input flux doesn't exists for the galaxy " + galaxy);
 		this.type = type;

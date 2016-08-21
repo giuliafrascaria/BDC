@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import controller.QueryController;
+import exceptions.ClassNotExistsException;
 import exceptions.FluxNotExistsException;
 import exceptions.GalaxyNotExistsException;
 import exceptions.PositionTableEmptyException;
@@ -33,10 +34,16 @@ public class QueryGUI {
 	private JLabel lblInput3;
 	private JLabel lblInput4;
 	public ButtonGroup aperture;
+	public ButtonGroup operation;
 	public JRadioButton rdbtn3;
 	public JRadioButton rdbtn5;
 	public JRadioButton rdbtnC;
 	public JRadioButton rdbtnSame;
+	public JRadioButton rdbtnAvg;
+	public JRadioButton rdbtnMed;
+	public JRadioButton rdbtnDev;
+	public JRadioButton rdbtnDevAvgAbs;
+	public JRadioButton rdbtnAll;
 	
 	private LogoutAL LogoutActionListener;
 	private HomeAL HomeActionListener;
@@ -196,32 +203,36 @@ public class QueryGUI {
 					txtInput1.setBounds(430, 210, 247, 19);
 					mainPanel.add(txtInput1);
 
-					lblInput2 = new JLabel("Flusso:");
-					lblInput2.setBounds(106, 285, 228, 15);
+					lblInput2 = new JLabel("Flussi da rapportare:");
+					lblInput2.setBounds(106, 285, 225, 15);
 					mainPanel.add(lblInput2);
 
 					txtInput2 = new JTextField();
-					txtInput2.setBounds(430, 285, 247, 19);
+					txtInput2.setBounds(325, 285, 150, 19);
 					mainPanel.add(txtInput2);
+					
+					txtInput3 = new JTextField();
+					txtInput3.setBounds(525, 285, 150, 19);
+					mainPanel.add(txtInput3);
 	
 					lblInput3 = new JLabel("Apertura:");
-					lblInput3.setBounds(106, 360, 289, 15);
+					lblInput3.setBounds(106, 360, 200, 15);
 					mainPanel.add(lblInput3);
 
 					rdbtn3 = new JRadioButton("3x3");
-					rdbtn3.setBounds(400, 360, 65, 25);
+					rdbtn3.setBounds(200, 360, 65, 15);
 					mainPanel.add(rdbtn3);
 					
 					rdbtn5 = new JRadioButton("5x5");
-					rdbtn5.setBounds(470, 360, 65, 25);
+					rdbtn5.setBounds(270, 360, 65, 15);
 					mainPanel.add(rdbtn5);
 					
 					rdbtnC = new JRadioButton("c");
-					rdbtnC.setBounds(540, 360, 65, 25);
+					rdbtnC.setBounds(340, 360, 65, 15);
 					mainPanel.add(rdbtnC);
 					
 					rdbtnSame = new JRadioButton("Tutte");
-					rdbtnSame.setBounds(400, 395, 350, 25);
+					rdbtnSame.setBounds(410, 360, 65, 15);
 					mainPanel.add(rdbtnSame);
 					
 					aperture = new ButtonGroup();
@@ -229,6 +240,37 @@ public class QueryGUI {
 					aperture.add(rdbtn5);
 					aperture.add(rdbtnC);
 					aperture.add(rdbtnSame);
+					
+					lblInput4 = new JLabel("Operazione richiesta:");
+					lblInput4.setBounds(106, 435, 200, 15);
+					mainPanel.add(lblInput4);
+					
+					rdbtnAvg = new JRadioButton("media");
+					rdbtnAvg.setBounds(270, 435, 75, 15);
+					mainPanel.add(rdbtnAvg);
+					
+					rdbtnMed = new JRadioButton("mediana");
+					rdbtnMed.setBounds(345, 435, 90, 15);
+					mainPanel.add(rdbtnMed);
+					
+					rdbtnDev = new JRadioButton("deviazione standar");
+					rdbtnDev.setBounds(435, 435, 200, 15);
+					mainPanel.add(rdbtnDev);
+					
+					rdbtnDevAvgAbs = new JRadioButton("deviazione standard assoluta");
+					rdbtnDevAvgAbs.setBounds(270, 475, 275, 25);
+					mainPanel.add(rdbtnDevAvgAbs);
+					
+					rdbtnAll = new JRadioButton("Tutte");
+					rdbtnAll.setBounds(550, 475, 275, 25);
+					mainPanel.add(rdbtnAll);
+					
+					operation = new ButtonGroup();
+					operation.add(rdbtnAvg);
+					operation.add(rdbtnMed);
+					operation.add(rdbtnDev);
+					operation.add(rdbtnDevAvgAbs);
+					operation.add(rdbtnAll);
 					break;
 			case 7: lblSubTitle.setText("Ricerca rapporto flusso righa e flusso continuo");
 			
@@ -332,9 +374,56 @@ public class QueryGUI {
 					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
 				}catch (FluxNotExistsException e) {
 					switch (e.getType()) {
-					case 1: JOptionPane.showMessageDialog(null, "Il flusso " + txtInput2.getText().toLowerCase() +  " non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
-					case 2:	JOptionPane.showMessageDialog(null, "Il flusso " + txtInput3.getText().toLowerCase() +  " non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 1: JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput2.getText().toLowerCase() +  "' non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 2:	JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput3.getText().toLowerCase() +  "' non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
 					}					
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case 6:
+				try {
+					String aper= null;
+					if (rdbtn3.isSelected()) {
+						aper = "3x3";
+					}else if (rdbtn5.isSelected()) {
+						aper = "5x5";
+					}else if (rdbtnC.isSelected()) {
+						aper = "c";
+					}else if (rdbtnSame.isSelected()) {
+						aper = null;
+					} else {
+						JOptionPane.showMessageDialog(null, "Selezionare un apertura" , "Errore", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					String oper = null;
+					if (rdbtnAvg.isSelected()) {
+						oper = "1";
+					}else if (rdbtnMed.isSelected()) {
+						oper = "2";
+					}else if (rdbtnDev.isSelected()) {
+						oper = "3";
+					}else if (rdbtnDevAvgAbs.isSelected()) {
+						oper = "4";
+					}else if (rdbtnSame.isSelected()) {
+						oper = "5";
+					} else {
+						JOptionPane.showMessageDialog(null, "Selezionare il tipo di operazione" , "Errore", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase(), aper, oper};
+					String[][] result = cntr.fluxStats(inputs[0], inputs[1], inputs[2], inputs[3], Integer.parseInt(inputs[4]));
+					//new ResultGUI(accountType, mainPanel, 6, inputs, result);
+					
+				} catch (ClassNotExistsException e) {
+					JOptionPane.showMessageDialog(null, "La classe spettrale '" + txtInput1.getText().toLowerCase() + "' non esisten nel database.", "Errore", JOptionPane.ERROR_MESSAGE);
+				} catch (FluxNotExistsException e) {
+					switch (e.getType()) {
+					case 1: JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput2.getText().toLowerCase() +  "' non esiste nel database ", "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 2:	JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput3.getText().toLowerCase() +  "' non esiste nel database ", "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 3:JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput2.getText().toLowerCase() +  "' non esiste per nessuna galassia della classe inserita. Impossibile dunque fare statistiche.", "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 4:JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput3.getText().toLowerCase() +  "' non esiste per nessuna galassia della classe inserita. Impossibile dunque fare statistiche.", "Errore", JOptionPane.ERROR_MESSAGE); break;
+					}	
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
@@ -361,8 +450,8 @@ public class QueryGUI {
 					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
 				}catch (FluxNotExistsException e) {
 					switch (e.getType()) {
-					case 1: JOptionPane.showMessageDialog(null, "Il flusso riga " + txtInput2.getText().toLowerCase() +  " con apertura selezionata non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
-					case 2:	JOptionPane.showMessageDialog(null, "Il flusso continuo " + txtInput2.getText().toLowerCase() +  " non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 1: JOptionPane.showMessageDialog(null, "Il flusso riga '" + txtInput2.getText().toLowerCase() +  "' con apertura selezionata non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 2:	JOptionPane.showMessageDialog(null, "Il flusso continuo '" + txtInput2.getText().toLowerCase() +  "' non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
 					}		
 				}catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);

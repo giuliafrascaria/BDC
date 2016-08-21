@@ -202,4 +202,37 @@ public class GalaxyRepository {
 			}
 		}
 	}
+	
+	public boolean existSpectralClass(String spClass) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		final String query = "select * from galaxy where spectralClass=?";
+		
+		try{		
+			connection = this.dataSource.getConnection();
+			
+			statement = connection.prepareStatement(query);
+			statement.setString(1, spClass);
+			result = statement.executeQuery();
+			
+			if (result.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		}finally{
+			// release resources
+			if(result != null){
+				result.close();
+			}
+			// release resources
+			if(statement != null){
+				statement.close();
+			}
+			if(connection  != null){
+				connection.close();
+			}
+		}
+	}
 }
