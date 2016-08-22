@@ -430,6 +430,7 @@ public class QueryGUI {
 					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
 
 				} catch (Exception e) {
+					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;

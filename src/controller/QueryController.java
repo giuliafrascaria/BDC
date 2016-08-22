@@ -314,7 +314,7 @@ public class QueryController {
 	public String[][] findFluxes(String galaxy, String[] fluxes) throws Exception{
 		GalaxyRepository gr = new GalaxyRepository();
 		if (gr.findByPrimaryKey(galaxy) == null) {
-			throw new ClassNotExistsException();
+			throw new GalaxyNotExistsException();
 		}
 		List<String> notFound = new ArrayList<String>();
 		List<String> contFlux = new ArrayList<String>();
