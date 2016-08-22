@@ -152,34 +152,43 @@ public class PositionRepository {
 
 	/**
 	 * Find a position by redshift value
-	 * @param redshift value
-	 * @return returns the found position instance
+	 * @param redshift value, result range, number of results
+	 * @return returns the found position instances
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public Position findByRedShift(String redshift) throws Exception {
+	public List<Position> findByRedShift(String[] inputs) throws Exception {
  		Connection connection = null;
  		PreparedStatement statement = null;
- 		Position position = null;
+ 		List<Position> positions = new ArrayList<Position>();
  		ResultSet result = null;
- 		final String query = "select galaxy, redshift from position where redShift<"+redshift;
+ 		final String query;
+ 		if(inputs[1] == "<"){
+ 			query = "select galaxy, redshift from position where redShift < ?";
+ 		}else if(inputs[1] == ">"){
+ 			query = "select galaxy, redshift from position where redShift > ?";
+ 		}else{
+ 			query = "select galaxy, redshift from position where redShift = ?";
+ 		}
  		
  		try{		
  			connection = this.dataSource.getConnection();
  			
  			statement = connection.prepareStatement(query);
- 			statement.setString(1, redshift);
+ 			statement.setFloat(1, Float.parseFloat(inputs[0]));
  			result = statement.executeQuery();
  			
- 			if (result.next()) {
- 				if (position == null) {
- 					position = new Position();
- 					
- 					position.setRedShift(String.valueOf(result.getFloat("redShift")));
- 					position.setGalaxy(result.getString("galaxy"));
- 				}
- 			} else {
- 				return null;
+ 			if (!result.next()) {
+				throw new PositionTableEmptyException();
+			}
+ 			while (result.next()) {
+ 				Position position = new Position();
+				position = new Position();
+				
+				position.setRedShift(String.valueOf(result.getFloat("redShift")));
+				position.setGalaxy(result.getString("galaxy"));
+				positions.add(position);
+ 				
  			}
  		}finally{
  			// release resources
@@ -194,7 +203,7 @@ public class PositionRepository {
  				connection.close();
  			}
  		}
- 		return position;
+ 		return positions;
  	}
 
 	

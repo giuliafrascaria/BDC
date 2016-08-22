@@ -35,6 +35,10 @@ public class QueryGUI {
 	private JLabel lblInput4;
 	public ButtonGroup aperture;
 	public ButtonGroup operation;
+	public ButtonGroup range;
+	public JRadioButton rdbtnLess;
+	public JRadioButton rdbtnGreater;
+	public JRadioButton rdbtnEqual;
 	public JRadioButton rdbtn3;
 	public JRadioButton rdbtn5;
 	public JRadioButton rdbtnC;
@@ -147,16 +151,29 @@ public class QueryGUI {
 					txtInput1.setBounds(430, 210, 247, 19);
 					mainPanel.add(txtInput1);
 			
-					lblInput2 = new JLabel("Visualizzare risultati con redshift > < =");
-					lblInput2.setBounds(106, 285, 306, 15);
+					lblInput2 = new JLabel("Range di risultati da visualizzare:");
+					lblInput2.setBounds(106, 285, 228, 15);
 					mainPanel.add(lblInput2);
-			
-					txtInput2 = new JTextField();
-					txtInput2.setBounds(430, 285, 247, 19);
-					mainPanel.add(txtInput2);
+
+					rdbtnLess = new JRadioButton("<");
+					rdbtnLess.setBounds(430, 285, 65, 15);
+					mainPanel.add(rdbtnLess);
 					
-					lblInput3 = new JLabel("Numero massimo di galassie da restituire:");
-					lblInput3.setBounds(106, 360, 306, 15);
+					rdbtnGreater = new JRadioButton(">");
+					rdbtnGreater.setBounds(520, 285, 65, 15);
+					mainPanel.add(rdbtnGreater);
+					
+					rdbtnEqual = new JRadioButton("=");
+					rdbtnEqual.setBounds(610, 285, 65, 15);
+					mainPanel.add(rdbtnEqual);
+					
+					range = new ButtonGroup();
+					range.add(rdbtnLess);
+					range.add(rdbtnGreater);
+					range.add(rdbtnEqual);
+					
+					lblInput3 = new JLabel("Numero massimo di risultati:");
+					lblInput3.setBounds(106, 360, 200, 15);
 					mainPanel.add(lblInput3);
 					
 					txtInput3 = new JTextField();
@@ -365,6 +382,29 @@ public class QueryGUI {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
+				
+			case 3:
+				try {
+					
+					String range = null;
+					if (rdbtnLess.isSelected()) {
+						range = "<";
+					}else if (rdbtnGreater.isSelected()) {
+						range = ">";
+					}else if (rdbtnEqual.isSelected()) {
+						range = "=";
+					} else {
+						JOptionPane.showMessageDialog(null, "Selezionare un range" , "Errore", JOptionPane.ERROR_MESSAGE);
+						return;
+					}				
+					String[] inputs = {txtInput1.getText(), range, txtInput3.getText()};
+					String[][] result = cntr.findRedShift(inputs);
+					new ResultGUI(accountType, mainPanel, 2, inputs, result);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+				
 			case 5:
 				try {
 					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase()};
