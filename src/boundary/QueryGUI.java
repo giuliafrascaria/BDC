@@ -33,7 +33,9 @@ public class QueryGUI {
 	private JLabel lblInput2;
 	private JLabel lblInput3;
 	private JLabel lblInput4;
+	private JLabel lblInput5;
 	public ButtonGroup aperture;
+	public ButtonGroup apertureb;
 	public ButtonGroup operation;
 	public ButtonGroup range;
 	public JRadioButton rdbtnLess;
@@ -42,6 +44,9 @@ public class QueryGUI {
 	public JRadioButton rdbtn3;
 	public JRadioButton rdbtn5;
 	public JRadioButton rdbtnC;
+	public JRadioButton rdbtn3b;
+	public JRadioButton rdbtn5b;
+	public JRadioButton rdbtnCb;
 	public JRadioButton rdbtnSame;
 	public JRadioButton rdbtnAvg;
 	public JRadioButton rdbtnMed;
@@ -152,7 +157,7 @@ public class QueryGUI {
 					mainPanel.add(txtInput1);
 			
 					lblInput2 = new JLabel("Range di risultati da visualizzare:");
-					lblInput2.setBounds(106, 285, 228, 15);
+					lblInput2.setBounds(106, 285, 300, 15);
 					mainPanel.add(lblInput2);
 
 					rdbtnLess = new JRadioButton("<");
@@ -225,6 +230,49 @@ public class QueryGUI {
 					txtInput3 = new JTextField();
 					txtInput3.setBounds(430, 360, 247, 19);
 					mainPanel.add(txtInput3);
+					
+					lblInput4 = new JLabel("Apertura (eventuale) numeratore:");
+					lblInput4.setBounds(106, 435, 300, 15);
+					mainPanel.add(lblInput4);
+
+					rdbtn3 = new JRadioButton("3x3");
+					rdbtn3.setBounds(430, 435, 65, 15);
+					mainPanel.add(rdbtn3);
+					
+					rdbtn5 = new JRadioButton("5x5");
+					rdbtn5.setBounds(520, 435, 65, 15);
+					mainPanel.add(rdbtn5);
+					
+					rdbtnC = new JRadioButton("c");
+					rdbtnC.setBounds(610, 435, 65, 15);
+					mainPanel.add(rdbtnC);
+					
+					aperture = new ButtonGroup();
+					aperture.add(rdbtn3);
+					aperture.add(rdbtn5);
+					aperture.add(rdbtnC);
+					
+					lblInput5 = new JLabel("Apertura (eventuale) denominatore:");
+					lblInput5.setBounds(106, 510, 300, 15);
+					mainPanel.add(lblInput5);
+
+					rdbtn3b = new JRadioButton("3x3");
+					rdbtn3b.setBounds(430, 510, 65, 15);
+					mainPanel.add(rdbtn3b);
+					
+					rdbtn5b = new JRadioButton("5x5");
+					rdbtn5b.setBounds(520, 510, 65, 15);
+					mainPanel.add(rdbtn5b);
+					
+					rdbtnCb = new JRadioButton("c");
+					rdbtnCb.setBounds(610, 510, 65, 15);
+					mainPanel.add(rdbtnCb);
+					
+					apertureb = new ButtonGroup();
+					apertureb.add(rdbtn3b);
+					apertureb.add(rdbtn5b);
+					apertureb.add(rdbtnCb);
+					
 					break;
 			case 6: lblSubTitle.setText("Ricerca statistiche dei rapporti delle righe per gruppo spettrale");
 			
@@ -445,15 +493,31 @@ public class QueryGUI {
 				break;
 			case 5:
 				try {
-					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase()};
-					String[][] result = cntr.fluxRatio(inputs[0], inputs[1], inputs[2]);
+					String aper= null;
+					if (rdbtn3.isSelected()) {
+						aper = "3x3";
+					}else if (rdbtn5.isSelected()) {
+						aper = "5x5";
+					}else if (rdbtnC.isSelected()) {
+						aper = "c";
+					}
+					String aperb= null;
+					if (rdbtn3b.isSelected()) {
+						aperb = "3x3";
+					}else if (rdbtn5b.isSelected()) {
+						aperb = "5x5";
+					}else if (rdbtnCb.isSelected()) {
+						aperb = "c";
+					}
+					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase(), aper, aperb};
+					String[][] result = cntr.fluxRatio(inputs[0], inputs[1], inputs[2], aper, aperb);
 					new ResultGUI(accountType, mainPanel, 5, inputs, result);
 				}catch (GalaxyNotExistsException e) {
 					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
 				}catch (FluxNotExistsException e) {
 					switch (e.getType()) {
-					case 1: JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput2.getText().toLowerCase() +  "' non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
-					case 2:	JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput3.getText().toLowerCase() +  "' non è memorizzato per la galassia " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 1: JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput2.getText().toLowerCase() +  "' non è memorizzato per la galassia. \n Si noti che se è un flusso riga del satellite Pacs occore specificare un apertura. " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
+					case 2:	JOptionPane.showMessageDialog(null, "Il flusso '" + txtInput3.getText().toLowerCase() +  "' non è memorizzato per la galassia. \n Si noti che se è un flusso riga del satellite Pacs occore specificare un apertura. " + txtInput1.getText().toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE); break;
 					}					
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);

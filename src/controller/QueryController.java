@@ -164,31 +164,49 @@ public class QueryController {
 		return result;
 	}
 
-	public String[][] fluxRatio(String galaxy, String fluxNum, String fluxDen) throws Exception{
+	public String[][] fluxRatio(String galaxy, String fluxNum, String fluxDen, String aperN, String aperD) throws Exception{
 		GalaxyRepository gr = new GalaxyRepository();
 		if (gr.findByPrimaryKey(galaxy) == null) {
 			throw new GalaxyNotExistsException(galaxy);
 		}
 		SpitzerRowRepository spr = new SpitzerRowRepository();
-		SpitzerRow num = null;
-		SpitzerRow den = null;
-		num = spr.findByPrimaryKey(galaxy, fluxNum);
-		if (num == null) {
+		PacsRowRepository prr = new PacsRowRepository();
+		float num, den;
+		boolean flagN, flagD;
+		if (spr.findByPrimaryKey(galaxy, fluxNum)==null && prr.findByPrimaryKey(galaxy, fluxNum, aperN)==null){
 			throw new FluxNotExistsException(galaxy, 1);
 		}
-		den = spr.findByPrimaryKey(galaxy, fluxDen);
-		if (den == null) {
+		if (spr.findByPrimaryKey(galaxy, fluxDen)==null && prr.findByPrimaryKey(galaxy, fluxDen, aperD)==null){
 			throw new FluxNotExistsException(galaxy, 2);
 		}
-		float ratio = Float.parseFloat(num.getVal())/Float.parseFloat(den.getVal());
+		if (spr.findByPrimaryKey(galaxy, fluxNum)!=null) {
+			SpitzerRow sr = spr.findByPrimaryKey(galaxy, fluxNum);
+			num = Float.parseFloat(sr.getVal());
+			flagN = sr.isFlag();
+		} else {
+			PacsRow pr = prr.findByPrimaryKey(galaxy, fluxNum, aperN);
+			num = Float.parseFloat(pr.getVal());
+			flagN = pr.isFlag();
+		}
+		if (spr.findByPrimaryKey(galaxy, fluxDen)!=null) {
+			SpitzerRow sr = spr.findByPrimaryKey(galaxy, fluxDen);
+			den = Float.parseFloat(sr.getVal());
+			flagD = sr.isFlag();
+		} else {
+			PacsRow pr = prr.findByPrimaryKey(galaxy, fluxDen, aperD);
+			den = Float.parseFloat(pr.getVal());
+			flagD = pr.isFlag();
+		}
+		
+		float ratio = num/den;
 		String limit = null;
-		if (num.isFlag() && !den.isFlag()) {
+		if (flagN && !flagD) {
 			limit = "upper limit";
-		}else if (!num.isFlag() && den.isFlag()) {
+		}else if (!flagN && flagD) {
 			limit = "lower limit";
-		} else if (num.isFlag() && den.isFlag()) {
+		} else if (flagN && flagD) {
 			limit = "sia numeratore che denominatore sono upper limit";
-		} else if (!num.isFlag() && !den.isFlag()) {
+		} else if (!flagN && !flagD) {
 			limit = "valore esatto";
 		}
 		String[][] result = {{String.valueOf(ratio), limit}};
