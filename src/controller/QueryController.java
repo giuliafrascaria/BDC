@@ -290,6 +290,100 @@ public class QueryController {
 		return result;
 	}
 
+	public String[][] findFluxes(String galaxy, String[] fluxes) throws Exception{
+		GalaxyRepository gr = new GalaxyRepository();
+		if (gr.findByPrimaryKey(galaxy) == null) {
+			throw new ClassNotExistsException();
+		}
+		List<String> notFound = new ArrayList<String>();
+		List<String> contFlux = new ArrayList<String>();
+		List<String> rowFlux = new ArrayList<String>();
+		List<String> contErr = new ArrayList<String>();
+		List<String> rowErr = new ArrayList<String>();
+		List<String> rowAp = new ArrayList<String>();
+		List<String> contName = new ArrayList<String>();
+		List<String> rowName = new ArrayList<String>();
+		PacsRowRepository prr = new PacsRowRepository();
+		PacsContRepository pcr = new PacsContRepository();
+		SpitzerRowRepository srr = new SpitzerRowRepository();
+		for (String flux : fluxes) {
+			boolean found = false;
+			if (srr.findByPrimaryKey(galaxy, flux) != null) {
+				found = true;
+				SpitzerRow sp = srr.findByPrimaryKey(galaxy, flux);
+				rowFlux.add(sp.getVal());
+				if (sp.isFlag()) {
+					rowErr.add("0");
+				} else {
+					rowErr.add(sp.getErr());
+				}
+				rowAp.add("/");
+				rowName.add(flux);
+			}
+			if (prr.findByPrimaryKey(galaxy, flux, "3x3") != null) {
+				found = true;
+				PacsRow pr = prr.findByPrimaryKey(galaxy, flux, "3x3");
+				rowFlux.add(pr.getVal());
+				if (pr.isFlag()) {
+					rowErr.add("0");
+				} else {
+					rowErr.add(pr.getErr());
+				}
+				rowAp.add("3x3");
+				rowName.add(flux);
+			}
+			if (prr.findByPrimaryKey(galaxy, flux, "5x5") != null) {
+				found = true;
+				PacsRow pr = prr.findByPrimaryKey(galaxy, flux, "5x5");
+				rowFlux.add(pr.getVal());
+				if (pr.isFlag()) {
+					rowErr.add("0");
+				} else {
+					rowErr.add(pr.getErr());
+				}
+				rowAp.add("5x5");
+				rowName.add(flux);
+			}
+			if (prr.findByPrimaryKey(galaxy, flux, "c") != null) {
+				found = true;
+				PacsRow pr = prr.findByPrimaryKey(galaxy, flux, "c");
+				rowFlux.add(pr.getVal());
+				if (pr.isFlag()) {
+					rowErr.add("0");
+				} else {
+					rowErr.add(pr.getErr());
+				}
+				rowAp.add("c");
+				rowName.add(flux);
+			}
+			if (pcr.findByPrimaryKey(galaxy, flux) != null) {
+				found = true;
+				PacsContinuousRow cr = pcr.findByPrimaryKey(galaxy, flux);
+				contFlux.add(cr.getVal());
+				if (cr.isFlag()) {
+					contErr.add("0");
+				} else {
+					contErr.add(cr.getErr());
+				}
+				contName.add(flux);
+			}
+			if (!found) {
+				notFound.add(flux);
+			}
+		}
+		String[] notFoundA = new String[notFound.size()];
+		String[] contFluxA = new String[contFlux.size()];
+		String[] rowFluxA = new String[rowFlux.size()];
+		String[] contErrA = new String[contErr.size()];
+		String[] rowErrA = new String[rowErr.size()];
+		String[] rowApA = new String[rowAp.size()];
+		String[] contNameA = new String[contName.size()];
+		String[] rowNameA = new String[rowName.size()];
+		String[][] result = {notFound.toArray(notFoundA), contFlux.toArray(contFluxA), contErr.toArray(contErrA), contName.toArray(contNameA), 
+					 rowFlux.toArray(rowFluxA),  rowErr.toArray(rowErrA), rowAp.toArray(rowApA), rowName.toArray(rowNameA)};
+		return result;
+		
+	}
 }
 
 

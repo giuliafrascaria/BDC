@@ -88,7 +88,33 @@ public class ResultGUI {
 					txtResult.setText(txtResult.getText() + outputs[0][i] + "____" + outputs[1][i] +"\n");
 				}
 				break;
-		case 4: lblSubTitle.setText("Ricerca linee spettrali: ");
+		case 4: lblSubTitle.setText("Ricerca linee spettrali: " + inputs[1] + "\n");
+				lblSubTitle2.setText("Per la galassia: " + inputs[0]);
+				if (outputs[0].length > 0) {
+					txtResult.setText("Non sono stati trovati i flussi: ");
+					for (String f : outputs[0]) {
+						txtResult.setText(txtResult.getText() + f + " ");
+					}
+				}
+				txtResult.setText(txtResult.getText() + "\n\n Flusso\tvalore\tupperLimit o errore\tapertura(eventuale)\n\n");
+				for (int i = 0; i<outputs[1].length; i++) {
+					String limit;
+					if (outputs[2][i].equals("0")) {
+						limit = "upperLimit";
+					} else {
+						limit = outputs[2][i];
+					}
+					txtResult.setText(txtResult.getText() + outputs[3][i] + " (continuo)\t" + outputs[1][i] + "\t" + limit + "\n");
+				}
+				for (int i = 0; i<outputs[4].length; i++) {
+					String limit;
+					if (outputs[5][i].equals("0")) {
+						limit = "upperLimit";
+					} else {
+						limit = outputs[5][i];
+					}
+					txtResult.setText(txtResult.getText() + outputs[7][i] + " (riga)\t" + outputs[4][i] + "\t" + limit + "\t" + outputs[6][i] + "\n");
+				}
 				break;
 		case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali della galassia: " + inputs[0]);
 				lblSubTitle2.setText("Flusso numeratore: " + inputs[1] + " Flusso denominatore: " + inputs[2]);

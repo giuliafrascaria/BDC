@@ -166,6 +166,22 @@ public class QueryGUI {
 					break;
 					
 			case 4: lblSubTitle.setText("Ricerca linee spettrali");
+					lblInput1 = new JLabel("Nome della galassia:");
+					lblInput1.setBounds(106, 210, 306, 15);
+					mainPanel.add(lblInput1);
+	
+					txtInput1 = new JTextField();
+					txtInput1.setBounds(430, 210, 247, 19);
+					mainPanel.add(txtInput1);
+	
+					lblInput2 = new JLabel("Flussi da trovare:");
+					lblInput2.setBounds(106, 285, 228, 15);
+					mainPanel.add(lblInput2);
+	
+					txtInput2 = new JTextField();
+					txtInput2.setText("flusso1_flusso2_...._flussoN");
+					txtInput2.setBounds(430, 285, 247, 19);
+					mainPanel.add(txtInput2);		
 					break;
 			case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali");
 			
@@ -231,8 +247,8 @@ public class QueryGUI {
 					rdbtnC.setBounds(340, 360, 65, 15);
 					mainPanel.add(rdbtnC);
 					
-					rdbtnSame = new JRadioButton("Tutte");
-					rdbtnSame.setBounds(410, 360, 65, 15);
+					rdbtnSame = new JRadioButton("Tutte o non necessaria");
+					rdbtnSame.setBounds(410, 360, 200, 15);
 					mainPanel.add(rdbtnSame);
 					
 					aperture = new ButtonGroup();
@@ -361,6 +377,18 @@ public class QueryGUI {
 					new ResultGUI(accountType, mainPanel, 2, inputs, result);
 				} catch (PositionTableEmptyException e){
 					JOptionPane.showMessageDialog(null, "Non ci sono posizioni salvate nel DB. Aggiungere galassie e poi riprovare." , "Errore", JOptionPane.ERROR_MESSAGE);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case 4:
+				try {
+					String[] inputs = {txtInput1.getText(), txtInput2.getText()};
+					String[] fluxes = inputs[1].split("_");
+					String[][] result = cntr.findFluxes(inputs[0], fluxes);
+					new ResultGUI(accountType, mainPanel, 4, inputs, result);
+				} catch (GalaxyNotExistsException e) {
+					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
