@@ -173,7 +173,7 @@ public class QueryGUI {
 					range.add(rdbtnEqual);
 					
 					lblInput3 = new JLabel("Numero massimo di risultati:");
-					lblInput3.setBounds(106, 360, 200, 15);
+					lblInput3.setBounds(106, 360, 300, 15);
 					mainPanel.add(lblInput3);
 					
 					txtInput3 = new JTextField();
@@ -389,12 +389,19 @@ public class QueryGUI {
 				break;
 			case 2:
 				try {
+					if (txtInput1.getText().equals("") || txtInput2.getText().equals("") || txtInput3.getText().equals("") || txtInput4.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "Compilare tutti i campi del form." , "Errore", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					String[] inputs = {txtInput1.getText(), txtInput2.getText(), txtInput3.getText(), txtInput4.getText()};
 					String[][] result = cntr.galaxyInACircle(inputs);
 					new ResultGUI(accountType, mainPanel, 2, inputs, result);
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(null, "Assicurarsi di aver inserito numeri e non parole." , "Errore", JOptionPane.ERROR_MESSAGE);
 				} catch (PositionTableEmptyException e){
 					JOptionPane.showMessageDialog(null, "Non ci sono posizioni salvate nel DB. Aggiungere galassie e poi riprovare." , "Errore", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e) {
+					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
@@ -417,9 +424,11 @@ public class QueryGUI {
 					String[] inputs = {txtInput1.getText(), range, txtInput3.getText()};
 					String[][] result = cntr.findRedShift(inputs);
 					new ResultGUI(accountType, mainPanel, 3, inputs, result);
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(null, "Assicurarsi di aver inserito numeri e non lettere." , "Errore", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
-				}	
+				}
 			case 4:
 				try {
 					String[] inputs = {txtInput1.getText(), txtInput2.getText()};
