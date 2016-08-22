@@ -216,8 +216,9 @@ public class QueryController {
 		}
 		PacsRowRepository prr = new PacsRowRepository();
 		SpitzerRowRepository spr = new SpitzerRowRepository();
-		List<Double> num = new ArrayList<Double>();
-		List<Double> den = new ArrayList<Double>();
+		List<Float> num = new ArrayList<Float>();
+		List<Float> den = new ArrayList<Float>();
+		List<Float> stats = new ArrayList<Float>();
 		if(spr.findIon(flux1)) {
 			num = spr.findAllRowOfClass(flux1, spetClass);
 			if (num.isEmpty()) {
@@ -244,8 +245,49 @@ public class QueryController {
 		} else {
 			throw new FluxNotExistsException(2);
 		}
-		//bisogna calcolare la media e cazzi vari per le due liste
-		return null;
+		for (float n : num) {
+			for (float d : den) {
+				stats.add(n/d);
+			}
+		}
+		String[][] result = {{"", "", "", ""}};
+		if (operType == 1 || operType == 5 || operType == 3) {
+			//average
+			float sum = 0;
+			for (float s : stats) {
+				sum += s;
+			}
+			result[0][0] = String.valueOf(sum/stats.size());
+		}
+		if (operType == 2 || operType == 5 || operType == 4) {
+			//median
+			Collections.sort(stats);
+			if (stats.size()%2 == 0) {
+				result[0][1] = String.valueOf( (stats.get((stats.size()/2) -1) + stats.get(stats.size()/2)) / 2 );
+			} else {
+				result[0][1] = String.valueOf(stats.get(stats.size()/2));
+			}
+		}
+		if (operType == 3 || operType == 5) {
+			//standard deviation
+			float rad = 0;
+			float avg = Float.parseFloat(result[0][0]);
+			for (float s : stats) {
+				rad += Math.pow((s-avg), 2);
+			}
+			rad = rad/stats.size();
+			result[0][2] = String.valueOf(Math.sqrt(rad));
+		}
+		if (operType == 4 || operType == 5) {
+			//absolute average deviation
+			float med = Float.parseFloat(result[0][1]);
+			for (float s : stats) {
+				s = s - med;
+			}
+			Collections.sort(stats);
+			result[0][3] = String.valueOf(stats.get(stats.size()/2));
+		}
+		return result;
 	}
 
 }

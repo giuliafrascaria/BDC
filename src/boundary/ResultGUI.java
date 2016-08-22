@@ -95,7 +95,26 @@ public class ResultGUI {
 				txtResult.setText("Valore del rapporto\tinformazioni sul valore.\n\n");
 				txtResult.setText(txtResult.getText() + outputs[0][0] + "\t" + outputs[0][1] +"\n");
 				break;
-		case 6: lblSubTitle.setText("Ricerca dei rapporto flusso riga e continuo: ");
+		case 6: lblSubTitle.setText("Ricerca statistiche del gruppo spettrale: " + inputs[0]);
+				lblSubTitle2.setText("Del flusso: " + inputs[1] + " Flusso denominatore: " + inputs[2]);
+				int oper = Integer.parseInt(inputs[4]);
+				txtResult.setText("Operazione\trisultato.\n\n");
+				if (oper == 1 || oper == 5) {
+					//average
+					txtResult.setText(txtResult.getText() + "Media\t" + outputs[0][0] +"\n");
+				}
+				if (oper == 2 || oper == 5) {
+					//median
+					txtResult.setText(txtResult.getText() + "Mediana\t" + outputs[0][1] +"\n");
+				}
+				if (oper == 3 || oper == 5) {
+					//standard deviation
+					txtResult.setText(txtResult.getText() + "Deviazione standard\t" + outputs[0][2] +"\n");
+				}
+				if (oper == 4 || oper == 5) {
+					//absolute average deviation
+					txtResult.setText(txtResult.getText() + "Deviazione media assoluta\t" + outputs[0][3] +"\n");
+				}
 				break;
 		case 7: lblSubTitle.setText("Ricerca rapporto flusso riga (apertura " +  inputs[2] + ") e continuo: " + inputs[1]);
 				lblSubTitle2.setText("Per la galassia:" + inputs[0]);

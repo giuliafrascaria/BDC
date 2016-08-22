@@ -413,7 +413,7 @@ public class QueryGUI {
 					}
 					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase(), aper, oper};
 					String[][] result = cntr.fluxStats(inputs[0], inputs[1], inputs[2], inputs[3], Integer.parseInt(inputs[4]));
-					//new ResultGUI(accountType, mainPanel, 6, inputs, result);
+					new ResultGUI(accountType, mainPanel, 6, inputs, result);
 					
 				} catch (ClassNotExistsException e) {
 					JOptionPane.showMessageDialog(null, "La classe spettrale '" + txtInput1.getText().toLowerCase() + "' non esisten nel database.", "Errore", JOptionPane.ERROR_MESSAGE);

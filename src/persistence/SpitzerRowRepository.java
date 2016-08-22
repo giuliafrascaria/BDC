@@ -226,10 +226,10 @@ public class SpitzerRowRepository {
 		}
 	}
 	
-	public List<Double> findAllRowOfClass(String ion, String spClass) throws Exception {
+	public List<Float> findAllRowOfClass(String ion, String spClass) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		List<Double> values = new ArrayList<Double>();
+		List<Float> values = new ArrayList<Float>();
 		ResultSet result = null;
 		final String query = "select val from flux_spitzer join galaxy on galaxy=name  where spectralClass=? and ion=?";
 			
@@ -241,7 +241,7 @@ public class SpitzerRowRepository {
 			result = statement.executeQuery();
 
 			while (result.next()) {
-				values.add((double) result.getFloat("val"));
+				values.add(result.getFloat("val"));
 			}
 		}finally{
 			// release resources
