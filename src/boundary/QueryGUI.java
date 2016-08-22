@@ -416,8 +416,10 @@ public class QueryGUI {
 					}				
 					String[] inputs = {txtInput1.getText(), range, txtInput3.getText()};
 					String[][] result = cntr.findRedShift(inputs);
-					new ResultGUI(accountType, mainPanel, 2, inputs, result);
-
+					new ResultGUI(accountType, mainPanel, 3, inputs, result);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
+				}	
 			case 4:
 				try {
 					String[] inputs = {txtInput1.getText(), txtInput2.getText()};
