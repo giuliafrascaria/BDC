@@ -235,16 +235,16 @@ public class PacsRowRepository {
 		}
 	}
 	
-	public List<Double> findAllRowOfClass(String ion, String spClass, String aper) throws Exception {
+	public List<Float> findAllRowOfClass(String ion, String spClass, String aper) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		List<Double> values = new ArrayList<Double>();
+		List<Float> values = new ArrayList<Float>();
 		ResultSet result = null;
 		final String query;
 		if (aper == null) {
 			query = "select val from flux_pacs join galaxy on galaxy=name  where spectralClass=? and ion=?";
 		} else {
-			query = "select val from flux_pacs join galaxy on galaxy=name  where spectralClass=? and ion=?and aperture=?";	
+			query = "select val from flux_pacs join galaxy on galaxy=name  where spectralClass=? and ion=? and aperture=?";	
 		}
 			
 		try{		
@@ -258,7 +258,7 @@ public class PacsRowRepository {
 			result = statement.executeQuery();
 
 			while (result.next()) {
-				values.add((double) result.getFloat("val"));
+				values.add(result.getFloat("val"));
 			}
 		}finally{
 			// release resources

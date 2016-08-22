@@ -183,6 +183,22 @@ public class QueryGUI {
 					break;
 					
 			case 4: lblSubTitle.setText("Ricerca linee spettrali");
+					lblInput1 = new JLabel("Nome della galassia:");
+					lblInput1.setBounds(106, 210, 306, 15);
+					mainPanel.add(lblInput1);
+	
+					txtInput1 = new JTextField();
+					txtInput1.setBounds(430, 210, 247, 19);
+					mainPanel.add(txtInput1);
+	
+					lblInput2 = new JLabel("Flussi da trovare:");
+					lblInput2.setBounds(106, 285, 228, 15);
+					mainPanel.add(lblInput2);
+	
+					txtInput2 = new JTextField();
+					txtInput2.setText("flusso1_flusso2_...._flussoN");
+					txtInput2.setBounds(430, 285, 247, 19);
+					mainPanel.add(txtInput2);		
 					break;
 			case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali");
 			
@@ -248,8 +264,8 @@ public class QueryGUI {
 					rdbtnC.setBounds(340, 360, 65, 15);
 					mainPanel.add(rdbtnC);
 					
-					rdbtnSame = new JRadioButton("Tutte");
-					rdbtnSame.setBounds(410, 360, 65, 15);
+					rdbtnSame = new JRadioButton("Tutte o non necessaria");
+					rdbtnSame.setBounds(410, 360, 200, 15);
 					mainPanel.add(rdbtnSame);
 					
 					aperture = new ButtonGroup();
@@ -382,6 +398,7 @@ public class QueryGUI {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
+
 				
 			case 3:
 				try {
@@ -400,11 +417,20 @@ public class QueryGUI {
 					String[] inputs = {txtInput1.getText(), range, txtInput3.getText()};
 					String[][] result = cntr.findRedShift(inputs);
 					new ResultGUI(accountType, mainPanel, 2, inputs, result);
+
+			case 4:
+				try {
+					String[] inputs = {txtInput1.getText(), txtInput2.getText()};
+					String[] fluxes = inputs[1].split("_");
+					String[][] result = cntr.findFluxes(inputs[0], fluxes);
+					new ResultGUI(accountType, mainPanel, 4, inputs, result);
+				} catch (GalaxyNotExistsException e) {
+					JOptionPane.showMessageDialog(null, "La galassia '" + txtInput1.getText().toLowerCase() + "' non esiste." , "Galassia inesistente", JOptionPane.ERROR_MESSAGE);
+
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
-				
 			case 5:
 				try {
 					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase()};
@@ -453,7 +479,7 @@ public class QueryGUI {
 					}
 					String[] inputs = {txtInput1.getText().toLowerCase(), txtInput2.getText().toLowerCase(), txtInput3.getText().toLowerCase(), aper, oper};
 					String[][] result = cntr.fluxStats(inputs[0], inputs[1], inputs[2], inputs[3], Integer.parseInt(inputs[4]));
-					//new ResultGUI(accountType, mainPanel, 6, inputs, result);
+					new ResultGUI(accountType, mainPanel, 6, inputs, result);
 					
 				} catch (ClassNotExistsException e) {
 					JOptionPane.showMessageDialog(null, "La classe spettrale '" + txtInput1.getText().toLowerCase() + "' non esisten nel database.", "Errore", JOptionPane.ERROR_MESSAGE);
