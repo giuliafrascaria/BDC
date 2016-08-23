@@ -83,9 +83,13 @@ public class ResultGUI{
 				}
 				break;
 		case 3: lblSubTitle.setText("Ricerca per caratteristiche fisiche: prime " + inputs[2]+ " galassie con redshift " + inputs[1] + " " + inputs[0]);
-				txtResult.setText("Nome galassia\t\tredshift\n\n");
+				txtResult.setText("Nome galassia\tredshift\n\n");
 				for (int i=0; i<outputs[0].length; i++) {
-					txtResult.setText(txtResult.getText() + outputs[0][i] + "\t\t" + outputs[1][i] +"\n");
+					
+			        String foo = String.format("%-20s \t %s", outputs[0][i], outputs[1][i]);
+			        // outputs[0][i] + "\t\t" + outputs[1][i]
+				         
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				break;
 		case 4: lblSubTitle.setText("Ricerca linee spettrali: " + inputs[1] + "\n");
