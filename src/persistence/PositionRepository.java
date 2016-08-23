@@ -181,7 +181,9 @@ public class PositionRepository {
  			if (!result.next()) {
 				throw new PositionTableEmptyException();
 			}
+
  			while (result.next()) {
+ 				
  				Position position = new Position();
 				position = new Position();
 				

@@ -484,6 +484,7 @@ public class QueryGUI {
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
+				break;
 			case 4:
 				try {
 					String[] inputs = {txtInput1.getText(), txtInput2.getText()};

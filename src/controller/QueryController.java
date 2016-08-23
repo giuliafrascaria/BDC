@@ -92,26 +92,21 @@ public class QueryController {
 		PositionRepository pr = new PositionRepository();
 		
 		List<Position> allRes = pr.findByRedShift(inputs);
-		List<Position> positions = new ArrayList<Position>();
+		List<String> galaxy = new ArrayList<String>();
 		List<String> redshift = new ArrayList<String>();
 		for(Position pos : allRes)
 		{
-			for(int i = 0; i < Integer.parseInt(inputs[2]); i++)
-			{
-				positions.add(pos);
-				redshift.add(pos.getRedShift());
-			}
+			galaxy.add(pos.getGalaxy());
+			redshift.add(pos.getRedShift());	
 		}
 		
-		List<String> sorted = redshift;
-		Collections.sort(sorted);
-		int size = positions.size();
+		int size = Integer.parseInt(inputs[2]);
 		String[] gal = new String[size];
 		String[] rs = new String[size];
-		for(int i = 0; i < sorted.size(); i++)
+		for(int i = 0; i < size; i++)
 		{
-			gal[i] = positions.get(positions.indexOf(sorted.get(i))).getGalaxy();
-			rs[i] = String.valueOf(sorted.get(i));
+			gal[i] = galaxy.get(i);
+			rs[i] = String.valueOf(redshift.get(i));
 		}
 		String[][] result = {gal, rs};
 		
