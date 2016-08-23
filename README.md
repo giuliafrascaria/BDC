@@ -16,5 +16,3 @@ NGC3607
 e tale galassia non esiste nel file delle galassie quindi non viene salvato tale flusso
 
 Nella ricerca 6 (le statistiche) si possono confrontare solo righe non flussi continui
-
-Nella ricerca 5 si possono confrontare solo flussi Spitzer

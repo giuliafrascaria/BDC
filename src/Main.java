@@ -1,5 +1,4 @@
 import boundary.LoginGUI;
-import controller.QueryController;
 
 public class Main {
 

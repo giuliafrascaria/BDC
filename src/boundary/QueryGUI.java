@@ -449,7 +449,6 @@ public class QueryGUI {
 				} catch (PositionTableEmptyException e){
 					JOptionPane.showMessageDialog(null, "Non ci sono posizioni salvate nel DB. Aggiungere galassie e poi riprovare." , "Errore", JOptionPane.ERROR_MESSAGE);
 				} catch (Exception e) {
-					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Si è verificato un errore interno, riprovare più tardi" , "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
