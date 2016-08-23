@@ -4,13 +4,12 @@ import java.awt.Font;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class ResultGUI {
+public class ResultGUI{
 	private int accountType;
 	public JPanel mainPanel;
 	

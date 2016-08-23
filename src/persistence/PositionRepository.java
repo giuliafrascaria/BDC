@@ -132,6 +132,7 @@ public class PositionRepository {
 			} else {
 				return null;
 			}
+			
 		}finally{
 			// release resources
 			if(result != null){
@@ -163,17 +164,16 @@ public class PositionRepository {
  		List<Position> positions = new ArrayList<Position>();
  		ResultSet result = null;
  		final String query;
- 		if(inputs[1] == "<"){
+ 		
+ 		if(inputs[1].equals("<")){
  			query = "select galaxy, redshift from position where redShift < ?";
- 		}else if(inputs[1] == ">"){
+ 		}else if(inputs[1].equals(">")){
  			query = "select galaxy, redshift from position where redShift > ?";
  		}else{
  			query = "select galaxy, redshift from position where redShift = ?";
  		}
- 		
  		try{		
  			connection = this.dataSource.getConnection();
- 			
  			statement = connection.prepareStatement(query);
  			statement.setFloat(1, Float.parseFloat(inputs[0]));
  			result = statement.executeQuery();
@@ -187,9 +187,9 @@ public class PositionRepository {
 				
 				position.setRedShift(String.valueOf(result.getFloat("redShift")));
 				position.setGalaxy(result.getString("galaxy"));
-				positions.add(position);
- 				
+				positions.add(position);				
  			}
+ 			
  		}finally{
  			// release resources
  			if(result != null){

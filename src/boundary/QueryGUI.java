@@ -458,7 +458,12 @@ public class QueryGUI {
 			case 3:
 				try {
 					
-					String range = null;
+					if (txtInput1.getText().equals("") ||  txtInput3.getText().equals("") ) {
+						JOptionPane.showMessageDialog(null, "Compilare tutti i campi del form." , "Errore", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					String range;
 					if (rdbtnLess.isSelected()) {
 						range = "<";
 					}else if (rdbtnGreater.isSelected()) {
@@ -468,8 +473,10 @@ public class QueryGUI {
 					} else {
 						JOptionPane.showMessageDialog(null, "Selezionare un range" , "Errore", JOptionPane.ERROR_MESSAGE);
 						return;
-					}				
+					}	
+
 					String[] inputs = {txtInput1.getText(), range, txtInput3.getText()};
+					
 					String[][] result = cntr.findRedShift(inputs);
 					new ResultGUI(accountType, mainPanel, 3, inputs, result);
 				} catch (NumberFormatException e) {
