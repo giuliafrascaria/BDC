@@ -90,7 +90,6 @@ public class QueryController {
 	public String[][] findRedShift(String[] inputs) throws Exception 
 	{
 		PositionRepository pr = new PositionRepository();
-		
 		List<Position> allRes = pr.findByRedShift(inputs);
 		List<String> galaxy = new ArrayList<String>();
 		List<String> redshift = new ArrayList<String>();
@@ -100,7 +99,7 @@ public class QueryController {
 			redshift.add(pos.getRedShift());	
 		}
 		
-		int size = Integer.parseInt(inputs[2]);
+		int size =  Math.min(Integer.parseInt(inputs[2]), allRes.size());
 		String[] gal = new String[size];
 		String[] rs = new String[size];
 		for(int i = 0; i < size; i++)
