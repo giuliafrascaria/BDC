@@ -178,11 +178,10 @@ public class PositionRepository {
  			statement.setFloat(1, Float.parseFloat(inputs[0]));
  			result = statement.executeQuery();
  			
- 			if (!result.next()) {
-				throw new PositionTableEmptyException();
-			}
+ 			boolean isEmpty = true;
 
  			while (result.next()) {
+ 				isEmpty = false;
  				
  				Position position = new Position();
 				position = new Position();
@@ -191,6 +190,9 @@ public class PositionRepository {
 				position.setGalaxy(result.getString("galaxy"));
 				positions.add(position);				
  			}
+ 			if (isEmpty) {
+				throw new PositionTableEmptyException();
+			}
  			
  		}finally{
  			// release resources
@@ -221,10 +223,11 @@ public class PositionRepository {
 			statement = connection.prepareStatement(query);
 			result = statement.executeQuery();
 				
-			if (!result.next()) {
-				throw new PositionTableEmptyException();
-			}
+			boolean isEmpty = true;
+			
 			while (result.next()) {
+				isEmpty = false;
+				
 				Position position = new Position();
 				position = new Position();
 				position.setRaH(String.valueOf(result.getFloat("raH")));
@@ -237,6 +240,9 @@ public class PositionRepository {
 				position.setRedShift(String.valueOf(result.getFloat("redShift")));
 				position.setGalaxy(result.getString("galaxy"));
 				positions.add(position);
+			}
+			if (isEmpty) {
+				throw new PositionTableEmptyException();
 			}
 		}finally{
 			// release resources
