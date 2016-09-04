@@ -1,13 +1,13 @@
 CREATE TABLE position
 (
-	raH float NOT NULL,
-	raM float NOT NULL,
-	raS float NOT NULL,
+	raH real NOT NULL,
+	raM real NOT NULL,
+	raS real NOT NULL,
 	deSgn boolean NOT NULL,
-	deD float NOT NULL,
-	deM float NOT NULL,
-	deS float NOT NULL,
-	redShift float NOT NULL,
+	deD real NOT NULL,
+	deM real NOT NULL,
+	deS real NOT NULL,
+	redShift real NOT NULL,
 	galaxy character varying(64)
 		REFERENCES galaxy(name),
 		

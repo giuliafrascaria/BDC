@@ -5,8 +5,8 @@ CREATE TABLE flux_pacs
 		REFERENCES galaxy(name),
 	aperture character varying(64) NOT NULL,
 	flag boolean NOT NULL,
-	val float NOT NULL,
-	error float,
+	val real NOT NULL,
+	error real,
 	
 	CONSTRAINT pk_flux_pacs PRIMARY KEY (ion, aperture, galaxy)
 )
