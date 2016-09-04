@@ -24,6 +24,11 @@ public class BrightnessRepository {
 		PreparedStatement statement = null;
 		
 		final String insert = "insert into brightness(ion, flag, val, galaxy) values (?,?,?,?)";
+		/*nel database ion è varchar
+		 * flag è boolean
+		 * val è float
+		 * galaxy è varchar
+		 */
 		
 		try{		
 			connection = this.dataSource.getConnection();
@@ -36,6 +41,8 @@ public class BrightnessRepository {
 			statement = connection.prepareStatement(insert);
 			statement.setString(1, brightness.getIon());
 			statement.setBoolean(2, brightness.isFlag());
+			//se qui stampo Float.parseFloat(brightness.getVal()) il valore è esatto (ad esempio 42.3)
+			//ma poi nel database salva sbagliato (ad esempio 42.2999984741211)
 			statement.setFloat(3, Float.parseFloat(brightness.getVal()));
 			statement.setString(4, brightness.getGalaxy());
 			statement.executeUpdate();

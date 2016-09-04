@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.*;
+
 import entity.SpitzerRow;
 import exceptions.GalaxyNotExistsException;
 
@@ -56,6 +58,8 @@ public class SpitzerRowRepository {
 			}
 			statement.setString(5, row.getGalaxy());
 			statement.executeUpdate();
+			Logger log = Logger.getLogger(SpitzerRowRepository.class.getName());
+			log.debug(statement);
 		}
 		finally{
 			// release resources
