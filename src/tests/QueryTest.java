@@ -98,7 +98,7 @@ public class QueryTest {
 			String[] flux = {"siv10"};
 			String[][] result = cntr.findFluxes("mrk938", flux);
 			for (String s : result[7]) {
-				if (s.equals("siv10")) {
+				if (s.equals("siv10") && result[4][0].equals("1.46") && result[5][0].equals("0")) {
 					return;
 				}
 			}

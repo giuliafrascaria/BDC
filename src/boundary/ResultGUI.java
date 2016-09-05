@@ -70,25 +70,29 @@ public class ResultGUI{
 		switch (queryType) {
 		case 1: lblSubTitle.setText("Ricerca per nome: " + inputs[0]);
 				txtResult.setText("asc(ore_min_sec)_decl(segno_gradi_min_sec)_distanza_redshift_limit_NeV14.3_limit_NeV24.3_limit_OIV25.9"
-						+ "_met_errMet \n NOTE: '/' significa valore ingoto. \n\n");
+						+ "_met_errMet \n\n");
 				for (int i=1; i<outputs[0].length; i++) {
-					txtResult.setText(txtResult.getText() + "___" +outputs[0][i]);
+					if (i == 1) {
+						txtResult.setText(txtResult.getText() + outputs[0][i]);
+					} else {
+						txtResult.setText(txtResult.getText() + "___" + outputs[0][i]);
+					}
 				}
+				txtResult.setText(txtResult.getText() + "\n NOTE: '/' significa valore ingoto.");
 				break;
 		case 2: lblSubTitle.setText("Ricerca entro raggio: " + inputs[1] + ", massimo " + inputs[0] + " risultati.");
 				lblSubTitle2.setText("Centro in asc:" + inputs[2] + " e decl:" + inputs[3]);
 				txtResult.setText("Nome galassia\tdistanza dal centro.\n\n");
 				for (int i=0; i<outputs[0].length; i++) {
-					txtResult.setText(txtResult.getText() + outputs[0][i] + "\t" + outputs[1][i] +"\n");
+					String foo = String.format("%-20s \t %s", outputs[0][i], outputs[1][i]);
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				break;
 		case 3: lblSubTitle.setText("Ricerca per caratteristiche fisiche: prime " + inputs[2]+ " galassie con redshift " + inputs[1] + " " + inputs[0]);
 				txtResult.setText("Nome galassia\tredshift\n\n");
 				for (int i=0; i<outputs[0].length; i++) {
 					
-			        String foo = String.format("%-20s \t %s", outputs[0][i], outputs[1][i]);
-			        // outputs[0][i] + "\t\t" + outputs[1][i]
-				         
+			        String foo = String.format("%-20s \t %s", outputs[0][i], outputs[1][i]);				         
 					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				break;
@@ -100,7 +104,7 @@ public class ResultGUI{
 						txtResult.setText(txtResult.getText() + f + " ");
 					}
 				}
-				txtResult.setText(txtResult.getText() + "\n\n Flusso\tvalore\tupperLimit o errore\tapertura(eventuale)\n\n");
+				txtResult.setText(txtResult.getText() + "\n\n Flusso\t\tvalore\tupperLimit o errore\tapertura(eventuale per identificare)\n\n");
 				for (int i = 0; i<outputs[1].length; i++) {
 					String limit;
 					if (outputs[2][i].equals("0")) {
@@ -108,7 +112,8 @@ public class ResultGUI{
 					} else {
 						limit = outputs[2][i];
 					}
-					txtResult.setText(txtResult.getText() + outputs[3][i] + " (continuo)\t" + outputs[1][i] + "\t" + limit + "\n");
+					String foo = String.format("%-20s \t %s \t %s", outputs[3][i] + " (continuo)", outputs[1][i], limit);
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				for (int i = 0; i<outputs[4].length; i++) {
 					String limit;
@@ -117,39 +122,50 @@ public class ResultGUI{
 					} else {
 						limit = outputs[5][i];
 					}
-					txtResult.setText(txtResult.getText() + outputs[7][i] + " (riga)\t" + outputs[4][i] + "\t" + limit + "\t" + outputs[6][i] + "\n");
+					String foo = String.format("%-20s \t %s \t %s \t\t %s", outputs[7][i] + " (riga)", outputs[4][i], limit, outputs[6][i]);
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				break;
 		case 5: lblSubTitle.setText("Ricerca dei rapporti righe spettrali della galassia: " + inputs[0]);
 				lblSubTitle2.setText("Flusso numeratore: " + inputs[1] + " Flusso denominatore: " + inputs[2]);
 				txtResult.setText("Valore del rapporto\tinformazioni sul valore.\n\n");
-				txtResult.setText(txtResult.getText() + outputs[0][0] + "\t" + outputs[0][1] +"\n");
+				String fo = String.format("%-20s \t %s", outputs[0][0], outputs[0][1]);
+				txtResult.setText(txtResult.getText() + fo +"\n");
 				break;
 		case 6: lblSubTitle.setText("Ricerca statistiche del gruppo spettrale: " + inputs[0]);
 				lblSubTitle2.setText("Del flusso: " + inputs[1] + " Flusso denominatore: " + inputs[2]);
 				int oper = Integer.parseInt(inputs[4]);
-				txtResult.setText("Operazione\trisultato.\n\n");
+				txtResult.setText("Operazione\t\trisultato.\n\n");
 				if (oper == 1 || oper == 5) {
 					//average
-					txtResult.setText(txtResult.getText() + "Media\t" + outputs[0][0] +"\n");
+					String foo = String.format("%-20s \t %s", "Media", outputs[0][0]);
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				if (oper == 2 || oper == 5) {
 					//median
-					txtResult.setText(txtResult.getText() + "Mediana\t" + outputs[0][1] +"\n");
+					String foo = String.format("%-20s \t %s", "Mediana", outputs[0][1]);
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				if (oper == 3 || oper == 5) {
 					//standard deviation
-					txtResult.setText(txtResult.getText() + "Deviazione standard\t" + outputs[0][2] +"\n");
+					String foo = String.format("%-20s \t %s", "Deviazione standard", outputs[0][2]);
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				if (oper == 4 || oper == 5) {
 					//absolute average deviation
-					txtResult.setText(txtResult.getText() + "Deviazione media assoluta\t" + outputs[0][3] +"\n");
+					String foo = String.format("%-20s \t %s", "Deviazione media assoluta", outputs[0][3]);
+					txtResult.setText(txtResult.getText() + foo +"\n");
 				}
 				break;
-		case 7: lblSubTitle.setText("Ricerca rapporto flusso riga (apertura " +  inputs[2] + ") e continuo: " + inputs[1]);
+		case 7: String aper = inputs[2];
+				if (inputs[2] == null) {
+					aper = "del continuo";
+				}
+				lblSubTitle.setText("Ricerca rapporto flusso riga (apertura " +  aper + ") e continuo: " + inputs[1]);
 				lblSubTitle2.setText("Per la galassia:" + inputs[0]);
 				txtResult.setText("Valore del rapporto(continuo al denominatore)\tinformazioni sul valore.\n\n");
-				txtResult.setText(txtResult.getText() + outputs[0][0] + "\t" + outputs[0][1] +"\n");
+				String foo = String.format("%-20s \t\t\t %s", outputs[0][0] , outputs[0][1]);
+				txtResult.setText(txtResult.getText() + foo +"\n");
 				break;
 	}
 		

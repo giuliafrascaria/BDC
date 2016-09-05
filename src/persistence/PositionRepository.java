@@ -1,5 +1,6 @@
 package persistence;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -185,8 +186,11 @@ public class PositionRepository {
  				
  				Position position = new Position();
 				position = new Position();
-				
-				position.setRedShift(String.valueOf(result.getFloat("redShift")));
+				/*if I simple do: position.setRedShift(String.valueOf(result.getFloat("redShift")));
+				 * the negative red shift are in exponential form (example: -63E-4) */
+				BigDecimal b = new BigDecimal(String.valueOf(result.getFloat("redShift"))); 
+				position.setRedShift(String.valueOf(b));
+				//
 				position.setGalaxy(result.getString("galaxy"));
 				positions.add(position);				
  			}

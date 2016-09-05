@@ -50,7 +50,7 @@ public class QueryController {
 		Brightness brightness1 = br.findByPrimaryKey(name, "nev14.3");
 		Brightness brightness2 = br.findByPrimaryKey(name, "nev24.3");
 		Brightness brightness3 = br.findByPrimaryKey(name, "oiv25.9");
-		String sgn, fl1="", fl2="", fl3="";
+		String sgn, fl1="/", fl2="/", fl3="/";
 		if (position.getDeSgn()) {
 			sgn = "+";
 		}else {
@@ -58,21 +58,18 @@ public class QueryController {
 		}
 		if (brightness1 == null) {
 			brightness1 = new Brightness();
-			fl1 = "/";
 			brightness1.setVal("/");
 		} else if (brightness1.isFlag()) {
 			fl1 = "<";
 		}
 		if (brightness2 == null) {
 			brightness2 = new Brightness();
-			fl2 = "/";
 			brightness2.setVal("/");
 		} else if (brightness2.isFlag()) {
 			fl2 = "<";
 		}
 		if (brightness3 == null) {
 			brightness3 = new Brightness();
-			fl3 = "/";
 			brightness3.setVal("/");
 		} else if (brightness3.isFlag()) {
 			fl3 = "<";
